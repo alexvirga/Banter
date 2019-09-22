@@ -9,7 +9,7 @@ import {
   AsyncStorage,
   TouchableOpacity
 } from "react-native";
-import { Input, Button, Card, ListItem } from "react-native-elements";
+import { List, Input, Button, Card, ListItem } from "react-native-elements";
 
 export default class WaitingPage extends React.Component {
   state = {
@@ -23,55 +23,59 @@ export default class WaitingPage extends React.Component {
       .then(data => this.setState({ groups: data }));
   }
 
-  
-
-    
-    
-  
-
   render() {
-
-
-
-
-    let thisgroup = this.state.groups.filter(group => group.group_code === this.props.code)
-    let myusers = thisgroup.map(obj => obj.users)
-    const users = myusers.flat(1)
-
-  
-   
-    
-  
-    
-    
-
- 
+    let thisgroup = this.state.groups.filter(
+      group => group.group_code === this.props.code
+    );
+    let myusers = thisgroup.map(obj => obj.users);
+    const users = myusers.flat(1);
 
     return (
-      <View>
+      <View
+        style={{
+          alignItems: "center",
+          flex: 1,
+          justifyContent: "center",
+          padding: 20
+        }}
+      >
         <View>
-  {
-    users.map((user) => (
-      <ListItem
-        key={user.id}
-        title={user.username}
-        bottomDivider
-      />
-    ))
-  }
-</View>
+          <Text
+            style={{
+              textAlign: "center",
+              width: 400,
+              height: 60,
+              fontSize: 60,
+              letterSpacing: 25,
+              marginBottom: 30
+            }}
+          >
+            
+            {this.props.code}
+          </Text>
+        </View>
+
+        <View>
+          <Text style={{ alignSelf: "center", justifyContent: "center"}}> Members </Text>
+          {users.map(user => (
+            <ListItem
+              style={styles.listView}
+              key={user.id}
+              title={user.username}
+              bottomDivider
+            />
+          ))}
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  list: {
-    textAlign: "center",
-
+  listView: {
+    width: 300,
     alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
-    padding: 20
+    textAlign: "center",
+    alignSelf: "center"
   }
 });
