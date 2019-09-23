@@ -60,6 +60,7 @@ export default class Homepage extends React.Component {
 
   render() {
     let newRandomCode = this.codeGenerator(5);
+   
     
    
 
