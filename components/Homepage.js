@@ -22,6 +22,7 @@ export default class Homepage extends React.Component {
     groups: [],
     createNew: false
   };
+  
 
   handleCodeChange = code => {
     this.setState({ code: code });
