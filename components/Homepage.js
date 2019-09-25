@@ -59,6 +59,7 @@ export default class Homepage extends React.Component {
 
 
   render() {
+    console.log(this.state.user)
     let newRandomCode = this.codeGenerator(5);
    
     
@@ -80,7 +81,7 @@ export default class Homepage extends React.Component {
 
     return (
       <View style={styles.logincomp}>
-        <Text style={{ fontSize: 27, marginBottom: 50 }}>Enter Your Code</Text>
+        <Text style={{ fontSize: 27, marginBottom: 50 }}>Enter Your Code </Text>
         <TextInput
           autoCapitalize="characters"
           autoCorrect={false}

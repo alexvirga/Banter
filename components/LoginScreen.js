@@ -32,7 +32,7 @@ export default class Login extends Component {
 
   render() {
     let signup = (
-      <Signup />);
+      <Signup  clickHandler={this.props.clickHandler}/>);
 
       if (this.state.signup === true) return signup
   

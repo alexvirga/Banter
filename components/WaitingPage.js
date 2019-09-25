@@ -14,22 +14,27 @@ import { List, Input, Button, Card, ListItem } from "react-native-elements";
 export default class WaitingPage extends React.Component {
   state = {
     group: [],
-    currentGroup: ""
+    currentGroup: "",
+    isMember: false
   };
 
   componentDidMount() {
     fetch("http://localhost:3000/groups")
       .then(resp => resp.json())
-      .then(data => this.setState({group: data.filter(
-        group => group.group_code === this.props.code)}))
-
+      .then(data =>
+        this.setState({
+          group: data.filter(group => group.group_code === this.props.code)
+        })
+      );
   }
 
-  handleSubmit = (e) => {
-    if (users.id.includes(this.props.user.id)) {
-      alert("You are already in this group")
-    }
-    else {
+  handleSubmit = e => {
+    // let theseusers = this.state.group.map(obj => obj.users);
+    // const users = theseusers.flat(1);
+    // if (users.map(user => user.id === this.props.id)){
+    //   alert("You are already in this group")
+    // }
+    // else {
     fetch("http://localhost:3000/user_groups", {
       headers: {
         "content-type": "application/json",
@@ -41,24 +46,21 @@ export default class WaitingPage extends React.Component {
         group_id: this.state.group.map(group => group.id)[0]
       })
     })
-  .then(response => response.json())
-  .then (data => this.setState({currentGroup: data}))}}
-
- 
+      .then(response => response.json())
+      .then(data => this.setState({ currentGroup: data }));
+  };
+// }
 
   render() {
-
-  
-
-   
-
-
-    
     let myusers = this.state.group.map(obj => obj.users);
     const users = myusers.flat(1);
 
+    // if (users.map(user => user.id === this.props.id)){
+    //   this.setState({isMember: true})}
 
+    // const isMember = this.state.isMember;
 
+ 
     return (
       <View
         style={{
@@ -79,22 +81,26 @@ export default class WaitingPage extends React.Component {
               marginBottom: 10
             }}
           >
-            
             {this.props.code}
           </Text>
         </View>
 
         <View>
-        <Button
-        style={{
-          marginBottom: 15
-        }}
-          buttonStyle={styles.button}
-          onPress={() => this.handleSubmit()}
-          title="Join Group"
-          type="clear"
-        />
-          <Text style={{ alignSelf: "center", justifyContent: "center"}}> Members </Text>
+          <Button
+            style={{
+              marginBottom: 15
+            }}
+            buttonStyle={styles.button}
+            onPress={() => this.handleSubmit()}
+            title="Join Group"
+            type="clear"
+          />
+
+         
+          <Text style={{ alignSelf: "center", justifyContent: "center" }}>
+            {" "}
+            Members{" "}
+          </Text>
 
           {users.map(user => (
             <ListItem

@@ -29,36 +29,36 @@ class App extends React.Component {
   //   this.autoLogin();
   // }
 
-  autoLogin = () => {
-    console.log("hello")
-    _retrieveData = async () => {
-      try {
-        const value = AsyncStorage.getItem("token");
-        if (value !== null) {
-          fetch(`http://localhost:3000/autologin`, {
-            headers: {
-              'accept': "application/json",
-              Authorization: value
-            }
-          })
-            .then(resp => resp.json())
-            .then(data => {
-              console.log(data.token)
-              if (data.error) {
-                alert(data.error);
-              } else {
-                // AsyncStorage.setItem('user', data.user_name)
-                this.setState({isLoggedIn: true})
+  // autoLogin = () => {
+  //   console.log("hello")
+  //   _retrieveData = async () => {
+  //     try {
+  //       const value = AsyncStorage.getItem("token");
+  //       if (value !== null) {
+  //         fetch(`http://localhost:3000/autologin`, {
+  //           headers: {
+  //             'accept': "application/json",
+  //             Authorization: value
+  //           }
+  //         })
+  //           .then(resp => resp.json())
+  //           .then(data => {
+  //             console.log(data.token)
+  //             if (data.error) {
+  //               alert(data.error);
+  //             } else {
+  //               // AsyncStorage.setItem('user', data.user_name)
+  //               this.setState({isLoggedIn: true})
                 
-              }
-            });
-        }
-      } catch (error) {
-        alert("user not found");
-      }
-    };
-    _retrieveData();
-  };
+  //             }
+  //           });
+  //       }
+  //     } catch (error) {
+  //       alert("user not found");
+  //     }
+  //   };
+  //   _retrieveData();
+  // };
 
   clickHandler = user => {
     let email = user.email;
@@ -84,6 +84,7 @@ class App extends React.Component {
             await AsyncStorage.setItem("token", response.token);
           } catch (error) {}
           _storeData();
+          return homepage
           }
           
         };
