@@ -16,11 +16,39 @@ import {
   ListItem,
   ButtonGroup
 } from "react-native-elements";
+import WaitingPage from "./WaitingPage";
+
 
 export default class NewGroup extends React.Component {
   state = {
     billTotal: 0,
-    index: 2
+    index: 2,
+    tipPercentage: "",
+    submit: false,
+    group: []
+  };
+
+  handleSubmit = e => {
+    // let theseusers = this.state.group.map(obj => obj.users);
+    // const users = theseusers.flat(1);
+    // if (users.map(user => user.id === this.props.id)){
+    //   alert("You are already in this group")
+    // }
+    // else {
+    fetch("http://localhost:3000/groups", {
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify({
+        bill_total: this.state.billTotal,
+        group_code: this.props.code,
+      })
+    })
+      .then(response => response.json())
+      .then(data =>
+        this.setState({group: data, submit: true}));
   };
 
   handleTotal = num => {
@@ -32,16 +60,31 @@ export default class NewGroup extends React.Component {
   };
 
   render() {
+    let waitingpage = (
+      <WaitingPage
+        code={this.props.code}
+        user={this.props.user}
+        // group={this.state.group}
+      />)
+    if (this.state.submit === true){
+      return waitingpage
+    }
+
+    
+    
     const buttons = ["10%", "15%", "20%", "0%"];
     const { selectedIndex } = this.state.index;
 
     let tipAmt = buttons[this.state.index];
     let tipNum = tipAmt.replace("%", "");
+  
+    
     let tipTotal = (this.state.billTotal * tipNum) / 100;
     let billPlusTip = parseFloat(this.state.billTotal) + parseFloat(tipTotal);
     let formattedBillPlusTip = billPlusTip.toFixed(2);
+   
 
-    console.log(tipNum);
+  
 
     return (
       <View style={{ justifyContent: "center", flex: 1 }}>

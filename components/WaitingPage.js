@@ -15,7 +15,8 @@ export default class WaitingPage extends React.Component {
   state = {
     group: [],
     currentGroup: "",
-    isMember: false
+    isMember: false,
+    refresh: ""
   };
 
   componentDidMount() {
@@ -29,9 +30,9 @@ export default class WaitingPage extends React.Component {
   }
 
   handleSubmit = e => {
-    // let theseusers = this.state.group.map(obj => obj.users);
-    // const users = theseusers.flat(1);
-    // if (users.map(user => user.id === this.props.id)){
+    // let currentUsers = this.state.group.map(obj => obj.users);
+    // const users = currentUsers.flat(1);
+    // if (users.map(user => user.id === this.props.user.id)){
     //   alert("You are already in this group")
     // }
     // else {
@@ -48,9 +49,18 @@ export default class WaitingPage extends React.Component {
     })
       .then(response => response.json())
       .then(data => this.setState({ currentGroup: data }));
+    // };
   };
-// }
 
+  validateUser = () => {
+        let currentUsers = this.state.group.map(obj => obj.users);
+        let myusers = currentUsers.flat(1);
+        let currentIds = myusers.map(user => user.id)
+        if (currentIds.includes(this.props.user.id)){
+          alert("You already belong to this group")
+        }
+        else this.handleSubmit()
+  }
   render() {
     let myusers = this.state.group.map(obj => obj.users);
     const users = myusers.flat(1);
@@ -60,7 +70,6 @@ export default class WaitingPage extends React.Component {
 
     // const isMember = this.state.isMember;
 
- 
     return (
       <View
         style={{
@@ -91,12 +100,11 @@ export default class WaitingPage extends React.Component {
               marginBottom: 15
             }}
             buttonStyle={styles.button}
-            onPress={() => this.handleSubmit()}
+            onPress={() => this.validateUser()}
             title="Join Group"
             type="clear"
           />
 
-         
           <Text style={{ alignSelf: "center", justifyContent: "center" }}>
             {" "}
             Members{" "}
@@ -111,6 +119,15 @@ export default class WaitingPage extends React.Component {
             />
           ))}
         </View>
+        <Button
+          style={{
+            marginBottom: 15
+          }}
+          buttonStyle={styles.button}
+          onPress={() => this.componentDidMount()}
+          title="Refresh users"
+          type="clear"
+        />
       </View>
     );
   }
