@@ -26,6 +26,10 @@ export default class WaitingPage extends React.Component {
   }
 
   handleSubmit = (e) => {
+    if (users.id.includes(this.props.user.id)) {
+      alert("You are already in this group")
+    }
+    else {
     fetch("http://localhost:3000/user_groups", {
       headers: {
         "content-type": "application/json",
@@ -38,7 +42,7 @@ export default class WaitingPage extends React.Component {
       })
     })
   .then(response => response.json())
-  .then (data => this.setState({currentGroup: data}))}
+  .then (data => this.setState({currentGroup: data}))}}
 
  
 
