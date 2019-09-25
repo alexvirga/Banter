@@ -13,22 +13,62 @@ import { List, Input, Button, Card, ListItem } from "react-native-elements";
 
 export default class WaitingPage extends React.Component {
   state = {
-    groups: [],
-    currentGroup: ""
+    group: [],
+    currentGroup: "",
+    isMember: false,
+    refresh: ""
   };
 
   componentDidMount() {
     fetch("http://localhost:3000/groups")
       .then(resp => resp.json())
-      .then(data => this.setState({ groups: data }));
+      .then(data =>
+        this.setState({
+          group: data.filter(group => group.group_code === this.props.code)
+        })
+      );
   }
 
+  handleSubmit = e => {
+    // let currentUsers = this.state.group.map(obj => obj.users);
+    // const users = currentUsers.flat(1);
+    // if (users.map(user => user.id === this.props.user.id)){
+    //   alert("You are already in this group")
+    // }
+    // else {
+    fetch("http://localhost:3000/user_groups", {
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify({
+        user_id: this.props.user.id,
+        group_id: this.state.group.map(group => group.id)[0]
+      })
+    })
+      .then(response => response.json())
+      .then(data => this.setState({ currentGroup: data }));
+    // };
+  };
+
+  validateUser = () => {
+        let currentUsers = this.state.group.map(obj => obj.users);
+        let myusers = currentUsers.flat(1);
+        let currentIds = myusers.map(user => user.id)
+        if (currentIds.includes(this.props.user.id)){
+          alert("You already belong to this group")
+        }
+        else this.handleSubmit()
+  }
   render() {
-    let thisgroup = this.state.groups.filter(
-      group => group.group_code === this.props.code
-    );
-    let myusers = thisgroup.map(obj => obj.users);
+    let myusers = this.state.group.map(obj => obj.users);
     const users = myusers.flat(1);
+
+    // if (users.map(user => user.id === this.props.id)){
+    //   this.setState({isMember: true})}
+
+    // const isMember = this.state.isMember;
 
     return (
       <View
@@ -47,16 +87,29 @@ export default class WaitingPage extends React.Component {
               height: 60,
               fontSize: 60,
               letterSpacing: 25,
-              marginBottom: 30
+              marginBottom: 10
             }}
           >
-            
             {this.props.code}
           </Text>
         </View>
 
         <View>
-          <Text style={{ alignSelf: "center", justifyContent: "center"}}> Members </Text>
+          <Button
+            style={{
+              marginBottom: 15
+            }}
+            buttonStyle={styles.button}
+            onPress={() => this.validateUser()}
+            title="Join Group"
+            type="clear"
+          />
+
+          <Text style={{ alignSelf: "center", justifyContent: "center" }}>
+            {" "}
+            Members{" "}
+          </Text>
+
           {users.map(user => (
             <ListItem
               style={styles.listView}
@@ -66,6 +119,15 @@ export default class WaitingPage extends React.Component {
             />
           ))}
         </View>
+        <Button
+          style={{
+            marginBottom: 15
+          }}
+          buttonStyle={styles.button}
+          onPress={() => this.componentDidMount()}
+          title="Refresh users"
+          type="clear"
+        />
       </View>
     );
   }

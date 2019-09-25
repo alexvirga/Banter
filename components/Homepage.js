@@ -23,6 +23,16 @@ export default class Homepage extends React.Component {
     createNew: false
   };
 
+  componentDidMount() {
+    fetch("http://localhost:3000/groups")
+      .then(resp => resp.json())
+      .then(data =>
+        this.setState({
+          groups: data
+        })
+      );
+  }
+
   handleCodeChange = code => {
     this.setState({ code: code });
     {
@@ -33,53 +43,58 @@ export default class Homepage extends React.Component {
     }
   };
 
+  // Validates if group exists. If true, renders waiting page
   handleSubmit = () => {
-    this.setState({ submitted: true });
+    let codes = this.state.groups.map(group => group.group_code);
+    if (codes.includes(this.state.code)) {
+      this.setState({ submitted: true });
+    } else {
+      alert("Invalid code");
+      this.setState({ code: "" });
+    }
   };
 
   codeGenerator(length) {
-
-      var result = "";
-      var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      var charactersLength = characters.length;
-      for (var i = 0; i < length; i++) {
-        result += characters.charAt(
-          Math.floor(Math.random() * charactersLength)
-        );
-      }
-      return result;
-    
-  };
+    var result = "";
+    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 
   newGrouphandler = () => {
-    this.setState({createNew: true})
+    this.setState({ createNew: true });
+  };
 
- }
+  // handleNewGroupSubmit = () => {
+  //   this.setState({code: newRandomCode, submitted: true})
 
-
+  // }
 
   render() {
     let newRandomCode = this.codeGenerator(5);
-    
-   
 
     let renderNewGroup = (
-      <NewGroup code={newRandomCode} />);
+      <NewGroup code={newRandomCode} newGrouphandler={this.newGrouphandler} user={this.props.user}/>
+    );
 
-      if (this.state.createNew === true) return renderNewGroup
-
-  
-
+    if (this.state.createNew === true) return renderNewGroup;
 
     let waitingpage = (
-      <WaitingPage code={this.state.code} user={this.state.user} />
+      <WaitingPage
+        code={this.state.code}
+        user={this.state.user}
+        groups={this.state.groups}
+      />
     );
 
     if (this.state.submitted === true) return waitingpage;
 
     return (
       <View style={styles.logincomp}>
-        <Text style={{ fontSize: 27, marginBottom: 50 }}>Enter Your Code</Text>
+        <Text style={{ fontSize: 27, marginBottom: 50 }}>Enter Your Code </Text>
         <TextInput
           autoCapitalize="characters"
           autoCorrect={false}

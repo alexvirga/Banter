@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { Image, TouchableOpacity, ScrollView, Text, StyleSheet, View } from "react-native";
 import { Input, Button } from "react-native-elements";
+import Signup from "./Signup"
 
 export default class Login extends Component {
   state = {
     email: "",
     password: "",
-    user: ""
+    user: "",
+    signup: false
 
   };
 
@@ -23,7 +25,16 @@ export default class Login extends Component {
     this.props.clickHandler(this.state);
   };
 
+  signupHandler = () => {
+    this.setState({signup: true})
+  }
+
+
   render() {
+    let signup = (
+      <Signup  clickHandler={this.props.clickHandler}/>);
+
+      if (this.state.signup === true) return signup
   
     return (
       
@@ -45,6 +56,15 @@ export default class Login extends Component {
           secureTextEntry={true}
         />
         <View style={{ margin: 7 }} />
+        <Button
+        style={{
+          marginBottom: 15
+        }}
+          buttonStyle={styles.button}
+          onPress={() => this.signupHandler()}
+          title=" Sign Up"
+          type="clear"
+        />
 
         <TouchableOpacity onPress={this.handleSubmit}>
       <Image
