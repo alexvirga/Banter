@@ -16,7 +16,8 @@ export default class WaitingPage extends React.Component {
     group: [],
     currentGroup: "",
     isMember: false,
-    refresh: ""
+    refresh: "",
+    isLeader: false
   };
 
   componentDidMount() {
@@ -26,16 +27,12 @@ export default class WaitingPage extends React.Component {
         this.setState({
           group: data.filter(group => group.group_code === this.props.code)
         })
-      );
+      )
+      .then(data => this.validateLeader())
+      
   }
 
   handleSubmit = e => {
-    // let currentUsers = this.state.group.map(obj => obj.users);
-    // const users = currentUsers.flat(1);
-    // if (users.map(user => user.id === this.props.user.id)){
-    //   alert("You are already in this group")
-    // }
-    // else {
     fetch("http://localhost:3000/user_groups", {
       headers: {
         "content-type": "application/json",
@@ -48,27 +45,33 @@ export default class WaitingPage extends React.Component {
       })
     })
       .then(response => response.json())
-      .then(data => this.setState({ currentGroup: data }));
-    // };
+      .then(this.componentDidMount());
   };
 
   validateUser = () => {
-        let currentUsers = this.state.group.map(obj => obj.users);
-        let myusers = currentUsers.flat(1);
-        let currentIds = myusers.map(user => user.id)
-        if (currentIds.includes(this.props.user.id)){
-          alert("You already belong to this group")
-        }
-        else this.handleSubmit()
+    let currentUsers = this.state.group.map(obj => obj.users);
+    let myusers = currentUsers.flat(1);
+    let currentIds = myusers.map(user => user.id);
+    if (currentIds.includes(this.props.user.id)) {
+      alert("You already belong to this group");
+    } else this.handleSubmit();
+  };
+
+  validateLeader = () => {
+    let matchedLeader = this.state.group.map(group => group.leader_id === this.props.user.id)
+    if (matchedLeader[0] === true)
+      this.setState({isLeader: true });
+      else 
+      this.setState({isLeader: false})
   }
+
   render() {
+
+
+
     let myusers = this.state.group.map(obj => obj.users);
     const users = myusers.flat(1);
 
-    // if (users.map(user => user.id === this.props.id)){
-    //   this.setState({isMember: true})}
-
-    // const isMember = this.state.isMember;
 
     return (
       <View
@@ -128,6 +131,18 @@ export default class WaitingPage extends React.Component {
           title="Refresh users"
           type="clear"
         />
+        <View>
+          {this.state.isLeader ? (
+            <TouchableOpacity onPress={() => console.log("hi")}>
+              <Image
+                style={styles.button}
+                source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
+              />
+            </TouchableOpacity>
+          ) : (
+            <Text> </Text>
+          )}
+        </View>
       </View>
     );
   }
@@ -139,5 +154,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     alignSelf: "center"
+  },
+  button: {
+    marginTop: 30,
+    justifyContent: "center"
   }
 });

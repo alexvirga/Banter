@@ -77,7 +77,7 @@ export default class Homepage extends React.Component {
     let newRandomCode = this.codeGenerator(5);
 
     let renderNewGroup = (
-      <NewGroup code={newRandomCode} newGrouphandler={this.newGrouphandler} user={this.props.user}/>
+      <NewGroup code={newRandomCode} newGrouphandler={this.newGrouphandler} user={this.state.user}/>
     );
 
     if (this.state.createNew === true) return renderNewGroup;
