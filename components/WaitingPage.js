@@ -10,14 +10,15 @@ import {
   TouchableOpacity
 } from "react-native";
 import { List, Input, Button, Card, ListItem } from "react-native-elements";
+import BillView from "./BillView";
 
 export default class WaitingPage extends React.Component {
   state = {
     group: [],
-    currentGroup: "",
     isMember: false,
     refresh: "",
-    isLeader: false
+    isLeader: false,
+    ready: false
   };
 
   componentDidMount() {
@@ -66,6 +67,13 @@ export default class WaitingPage extends React.Component {
   }
 
   render() {
+    let group_id = this.state.group.map(group => group.id)
+    let groupid = group_id[0]
+    let billview =  <BillView group={this.state.group} user={this.props.user} index={this.props.index} group_id={groupid} code={this.props.code}/>
+
+    if (this.state.ready === true){
+      return billview
+    }
 
 
 
@@ -133,7 +141,7 @@ export default class WaitingPage extends React.Component {
         />
         <View>
           {this.state.isLeader ? (
-            <TouchableOpacity onPress={() => console.log("hi")}>
+            <TouchableOpacity onPress={() => this.setState({ready: true})}>
               <Image
                 style={styles.button}
                 source={require("../assets/round_arrow_forward_ios_black_18dp.png")}

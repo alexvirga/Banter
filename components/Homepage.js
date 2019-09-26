@@ -68,10 +68,6 @@ export default class Homepage extends React.Component {
     this.setState({ createNew: true });
   };
 
-  // handleNewGroupSubmit = () => {
-  //   this.setState({code: newRandomCode, submitted: true})
-
-  // }
 
   render() {
     let newRandomCode = this.codeGenerator(5);

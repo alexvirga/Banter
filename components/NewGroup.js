@@ -9,11 +9,6 @@ import {
   Image
 } from "react-native";
 import {
-  List,
-  Input,
-  Button,
-  Card,
-  ListItem,
   ButtonGroup
 } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
@@ -66,7 +61,8 @@ export default class NewGroup extends React.Component {
   };
 
   handleTotal = num => {
-    this.setState({ billTotal: num });
+    let fixednum = parseFloat(num)
+    this.setState({ billTotal: fixednum });
   };
 
   updateIndex = selectedIndex => {
@@ -75,12 +71,13 @@ export default class NewGroup extends React.Component {
   };
 
   render() {
-    console.log(this.state.index)
+
 
     let waitingpage = (
       <WaitingPage
         code={this.props.code}
         user={this.props.user}
+        index={this.state.index}
       />
     );
     if (this.state.submit === true) {
@@ -91,6 +88,7 @@ export default class NewGroup extends React.Component {
 
     let tipAmt = buttons[this.state.index];
     let tipNum = tipAmt.replace("%", "");
+
 
     let tipTotal = (this.state.billTotal * tipNum) / 100;
     let billPlusTip = parseFloat(this.state.billTotal) + parseFloat(tipTotal);
@@ -186,7 +184,7 @@ export default class NewGroup extends React.Component {
             ${formattedBillPlusTip}
           </Text>
         </View>
-
+            <View >
         <TouchableOpacity onPress={this.handleSubmit}>
           <Image
             style={{
@@ -197,6 +195,8 @@ export default class NewGroup extends React.Component {
             source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
           />
         </TouchableOpacity>
+
+            </View>
       </View>
     );
   }
