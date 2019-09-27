@@ -54,6 +54,10 @@ export default class Homepage extends React.Component {
     }
   };
 
+
+
+
+
   codeGenerator(length) {
     var result = "";
     var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -70,6 +74,7 @@ export default class Homepage extends React.Component {
 
 
   render() {
+    console.log(this.state.user)
     let newRandomCode = this.codeGenerator(5);
 
     let renderNewGroup = (
@@ -113,6 +118,12 @@ export default class Homepage extends React.Component {
           title="Generate New Code"
           type="clear"
         />
+                {/* <Button
+          buttonStyle={styles.button}
+          onPress={() => this.logoutHandler}
+          title="Log Out"
+          type="clear"
+        /> */}
 
         <View style={{ margin: 7 }} />
         <TouchableOpacity onPress={this.handleSubmit}>
