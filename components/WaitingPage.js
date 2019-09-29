@@ -17,7 +17,7 @@ export default class WaitingPage extends React.Component {
     group: [],
     isMember: false,
     refresh: "",
-    isLeader: false,
+    isLeader: true, // SET BACK TO FALSE ONCE TESTING IS COMPLETE
     ready: false
   };
 
@@ -63,7 +63,7 @@ export default class WaitingPage extends React.Component {
     if (matchedLeader[0] === true)
       this.setState({isLeader: true });
       else 
-      this.setState({isLeader: false})
+      this.setState({isLeader: true}) // SET BACK TO FALSE ONCE TESITNG IS COMPLETE
   }
 
   render() {

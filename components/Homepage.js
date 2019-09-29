@@ -8,7 +8,8 @@ import {
   View,
   TextInput,
   AsyncStorage,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from "react-native";
 import { Input, Button } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
@@ -20,7 +21,8 @@ export default class Homepage extends React.Component {
     user: this.props.user,
     submitted: false,
     groups: [],
-    createNew: false
+    createNew: false,
+    modalVisible: false
   };
 
   componentDidMount() {
@@ -32,6 +34,14 @@ export default class Homepage extends React.Component {
         })
       );
   }
+
+  setModalVisible(visible) {
+    this.setState({ createNew: true, modalVisible: visible });
+  }
+
+  closeModal = () => {
+    this.setState({modalVisible: false, createNew: false})
+}
 
   handleCodeChange = code => {
     this.setState({ code: code });
@@ -54,10 +64,6 @@ export default class Homepage extends React.Component {
     }
   };
 
-
-
-
-
   codeGenerator(length) {
     var result = "";
     var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -72,13 +78,29 @@ export default class Homepage extends React.Component {
     this.setState({ createNew: true });
   };
 
-
   render() {
-    console.log(this.state.user)
+
     let newRandomCode = this.codeGenerator(5);
 
     let renderNewGroup = (
-      <NewGroup code={newRandomCode} newGrouphandler={this.newGrouphandler} user={this.state.user}/>
+      <View>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <NewGroup
+            code={newRandomCode}
+            newGrouphandler={this.newGrouphandler}
+            user={this.state.user}
+            closeModal={this.closeModal}
+
+          />
+        </Modal>
+      </View>
     );
 
     if (this.state.createNew === true) return renderNewGroup;
@@ -114,11 +136,11 @@ export default class Homepage extends React.Component {
 
         <Button
           buttonStyle={styles.button}
-          onPress={() => this.newGrouphandler()}
+          onPress={() => this.setModalVisible(true)}
           title="Generate New Code"
           type="clear"
         />
-                {/* <Button
+        {/* <Button
           buttonStyle={styles.button}
           onPress={() => this.logoutHandler}
           title="Log Out"

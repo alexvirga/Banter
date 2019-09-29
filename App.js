@@ -1,10 +1,8 @@
 import React from "react";
-import {AsyncStorage, StyleSheet } from "react-native";
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
+import { AsyncStorage, StyleSheet } from "react-native";
 import LoginScreen from "./components/LoginScreen";
 import Homepage from "./components/Homepage";
-import ActionCableProvider from 'react-actioncable-provider'
+import ActionCableProvider from "react-actioncable-provider";
 
 class App extends React.Component {
   state = {
@@ -23,7 +21,6 @@ class App extends React.Component {
   }
 
   autoLogin = () => {
-   
     _retrieveData = async () => {
       try {
         const value = await AsyncStorage.getItem("token");
@@ -31,21 +28,19 @@ class App extends React.Component {
         if (value !== null) {
           fetch(`http://localhost:3000/autologin`, {
             headers: {
-              'accept': "application/json",
+              accept: "application/json",
               Authorization: value
             }
           })
             .then(resp => resp.json())
             .then(data => {
-              this.setState({user: data.email})
-              console.log(data.token)
+              this.setState({ user: data.email });
+              console.log(data.token);
               if (data.error) {
                 alert(data.error);
               } else {
-
                 // AsyncStorage.setItem('user', data)
-                this.setState({isLoggedIn: true})
-
+                this.setState({ isLoggedIn: true });
               }
             });
         }
@@ -72,23 +67,21 @@ class App extends React.Component {
     })
       .then(resp => resp.json())
       .then(response => {
-        console.log("response", response)
         if (response.token === undefined) {
           alert(response.errors);
         } else {
           this.setState({ isLoggedIn: true, user: response.email });
           _storeData = async () => {
             try {
-              await AsyncStorage.setItem("token", response.token)
-              await AsyncStorage.setItem("user", response);
-              ;
+              await AsyncStorage.setItem("token", response.token);
+              // await AsyncStorage.setItem("user", response);
             } catch (error) {
-              alert(error)
+              alert(error);
             }
-          }
+          };
           _storeData();
           return homepage;
-        };
+        }
       });
   };
 
@@ -105,21 +98,19 @@ class App extends React.Component {
     else return loginscreen;
   }
 
+  render() {
 
-  render(){
-    console.log(this.state.user)
 
     return (
       // <ActionCableProvider url="ws://localhost:3000/cable">
-        this.page()
+      this.page()
       // </ActionCableProvider>
-    )
+    );
   }
 }
 
-// const AppNavigator = createStackNavigator(
+// const MainNavigator = createStackNavigator(
 //   {
-//     App: App,
 //     Login: LoginScreen,
 //     Homepage: Homepage,
 //     WaitingPage: WaitingPage
@@ -135,6 +126,6 @@ const styles = StyleSheet.create({
     padding: 20
   }
 });
+// const App = createAppContainer(MainNavigator);
 
 export default App;
-//  createAppContainer(AppNavigator);
