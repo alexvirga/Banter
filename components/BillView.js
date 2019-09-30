@@ -16,14 +16,14 @@ import {
   ListItem,
   ButtonGroup
 } from "react-native-elements";
-// import { ActionCableConsumer } from "react-actioncable-provider";
-// import ActionCable from "react-native-actioncable";
+import UserBillSplit from "./UserBillSplit";
 
 export default class BillView extends React.Component {
   state = {
     users: [],
     user_amt: 0,
-    updated: 100
+    updated: 100,
+   
   };
 
   componentDidMount() {
@@ -54,49 +54,47 @@ export default class BillView extends React.Component {
       .then(this.componentDidMount());
   };
 
-  //   onReceived = (data) => {
-  //     console.log('Received data:', data)
-  // }
-
-  // calculateTip = (userpayment) => {
-  //   let groupobj= this.props.group[0]
-  //   let tip=groupobj.tip_percentage
-  //   let tipPayment = userpayment * tip / 100
-  //   return tipPayment
-
-  // }
-
-
-
-
-  convertAmtToString = (userAmt) => {
-    if (userAmt === null){
-      return "0"}
-      else 
-      return userAmt.toString()
-    }
-  
+  convertAmtToString = userAmt => {
+    if (userAmt === null) {
+      return "0";
+    } else return userAmt.toString();
+  };
 
   render() {
-
-
-
+    let totalArray = this.state.users.map(user => user.user_payment_amt);
+    let reducedTotal = totalArray.reduce((a, b) => a + b, 0);
 
     let billTotal = this.props.group.map(group => group.bill_total);
     let evenSplit = (billTotal / this.state.users.length).toFixed(2);
+    splitToString = evenSplit.toString();
     let groupobj = this.props.group[0];
     let tip = groupobj.tip_percentage;
 
-    // // const cable = ActionCable.createConsumer("ws://localhost:3000/cable");
+    let formatTotal = parseFloat((reducedTotal * tip) / 100 + reducedTotal);
+    let formatTotals = formatTotal.toFixed(2);
+    let splitTotal = formatTotals.split(".");
+    let base = splitTotal[0];
+    let float = splitTotal[1];
 
-    // cable.subscriptions.create(
-    //   { channel: "WaitingroomChannel", group_id: this.props.group_id },
-    //   {
-    //     received(data) {
-    //       console.log("Received data:", data);
-    //     }
-    //   }
-    // );
+    let formatBillAmt = parseFloat(reducedTotal);
+    let floatBillAmt = formatBillAmt.toFixed(2);
+    let splitBillAmt = floatBillAmt.split(".");
+    let baseBill = splitBillAmt[0];
+    let floatBill = splitBillAmt[1];
+
+    
+
+    backgroundchange = () => {
+      if (formatTotals >= billTotal[0]){
+      return "lightgreen"}
+      else
+      return "red"}
+
+      
+      
+    
+
+
     return (
       <View style={{ justifyContent: "center", flex: 1 }}>
         <View style={{ marginBottom: 30 }}>
@@ -125,11 +123,6 @@ export default class BillView extends React.Component {
           </Text>
         </View>
 
-        {/* <ActionCable
-            channel={{ channel: "WaitingroomChannel" }}
-            onReceived={this.onReceived}
-          /> */}
-
         <View>
           <ButtonGroup
             buttons={["10%", "15%", "20%", "0%"]}
@@ -152,47 +145,74 @@ export default class BillView extends React.Component {
           }}
         >
           {this.state.users.map(user => (
-            <View
-              key={user.user.id}
-              style={{
-                flex: 0,
-                flexDirection: "row",
-                justifyContent: "center",
-
-                backgroundColor: "#fff"
-              }}
-            >
-              
-              <Text style={{ padding: 10 }}>{user.user.username}</Text>
-              <Text style={{ padding: 10 }}>
-                {(user.user_payment_amt * tip) / 100}
-              </Text>
-              <Input
-                style={{
-                  flex: 0,
-                  paddingTop: 10,
-                  paddingRight: 10,
-                  paddingBottom: 10,
-                  paddingLeft: 0,
-                  backgroundColor: "#fff"
-                }}
-                // defaultValue={"0"}
-                value={(0 + user.user_payment_amt)}
-                placeholder={evenSplit}
-                onChangeText={text => this.handleTotal(text, user)}
-              />
-            </View>
+            <UserBillSplit
+              evenSplit={splitToString}
+              handleTotal={this.handleTotal}
+              user={user}
+              group={this.props.group}
+              key={user.id}
+            />
           ))}
         </View>
+
         <Button
           style={{
             marginBottom: 15
           }}
           buttonStyle={styles.button}
           onPress={() => this.componentDidMount()}
-          title="Refresh users"
+          title="Refresh"
           type="clear"
         />
+
+        <Text style={{ alignSelf: "center" }}>
+          ______________________________________________
+        </Text>
+        <View
+          style={{
+            marginLeft: 30,
+            marginRight: 30,
+            flex: 0,
+            flexDirection: "row"
+          }}
+        >
+          <Text
+            style={{
+              padding: 10,
+              flex: 1,
+              alignSelf: "center",
+              fontSize: 28,
+              flexShrink: 2
+            }}
+          >
+            ${baseBill}
+            <Text style={{fontSize: 10}}>
+              .{floatBill} {" "}
+            </Text>
+          </Text>
+
+          <Text style={{ padding: 10, flex: 1, alignSelf: "center" }}>
+            + ${(reducedTotal * tip) / 100} tip
+          </Text>
+
+          <Text
+            style={{
+              backgroundColor: backgroundchange(),
+              padding: 0,
+              margin: 10,
+              flex: 1,
+              alignSelf: "center",
+              fontSize: 28,
+              flexShrink: 2
+            }}
+          >
+            ${base}
+            <Text style={{fontSize: 10}}>
+              .{float} {" "}
+            </Text>
+          </Text>
+
+        </View>
       </View>
     );
   }
