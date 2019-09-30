@@ -16,28 +16,28 @@ import {
   ListItem,
   ButtonGroup
 } from "react-native-elements";
-import * as Progress from 'react-native-progress';
+import * as Progress from "react-native-progress";
 import UserBillSplit from "./UserBillSplit";
 
 export default class BillView extends React.Component {
   state = {
     users: [],
     user_amt: 0,
-    updated: 100,
-   
+    updated: 100
   };
 
   componentDidMount() {
     fetch("http://localhost:3000/user_groups")
       .then(resp => resp.json())
-      .then(data =>
+      .then(data => {
         this.setState({
           users: data.filter(user => user.group_id === this.props.group_id)
         })
-      );
+      });
   }
 
   handleTotal = (text, user) => {
+    console.log('patching')
     fetch("http://localhost:3000/user_groups", {
       headers: {
         "content-type": "application/json",
@@ -52,8 +52,28 @@ export default class BillView extends React.Component {
       })
     })
       .then(response => response.json())
-      .then(this.componentDidMount());
+      .then(()=> {
+        fetch("http://localhost:3000/user_groups")
+          .then(resp => resp.json())
+          .then(data => {
+            console.log(data.filter(user => user.group_id === this.props.group_id));
+            this.setState({
+              users: data.filter(user => user.group_id === this.props.group_id)
+            })
+          });
+      });
   };
+
+  // fetcher = () => {
+  //   fetch("http://localhost:3000/user_groups")
+  //     .then(resp => resp.json())
+  //     .then(data => {
+  //       console.log(data.filter(user => user.group_id === this.props.group_id));
+  //       this.setState({
+  //         users: data.filter(user => user.group_id === this.props.group_id)
+  //       })
+  //     });
+  // }
 
   convertAmtToString = userAmt => {
     if (userAmt === null) {
@@ -83,20 +103,15 @@ export default class BillView extends React.Component {
     let baseBill = splitBillAmt[0];
     let floatBill = splitBillAmt[1];
 
-    let progress= floatBillAmt/billTotal
-
-    
+    let progress = floatBillAmt / billTotal;
 
     backgroundchange = () => {
-      if (formatTotals >= billTotal[0]){
-      return "lightgreen"}
-      else
-      return "red"}
+      if (formatTotals >= billTotal[0]) {
+        return "lightgreen";
+      } else return "red";
+    };
 
-
-      
-    
-
+    console.log(this.state)
 
     return (
       <View style={{ justifyContent: "center", flex: 1 }}>
@@ -189,9 +204,7 @@ export default class BillView extends React.Component {
             }}
           >
             ${baseBill}
-            <Text style={{fontSize: 10}}>
-              .{floatBill} {" "}
-            </Text>
+            <Text style={{ fontSize: 10 }}>.{floatBill} </Text>
           </Text>
 
           <Text style={{ padding: 10, flex: 1, alignSelf: "center" }}>
@@ -210,13 +223,17 @@ export default class BillView extends React.Component {
             }}
           >
             ${base}
-            <Text style={{fontSize: 10}}>
-              .{float} {" "}
-            </Text>
+            <Text style={{ fontSize: 10 }}>.{float} </Text>
           </Text>
-
         </View>
-        <Progress.Circle progress={progress}  showsText={true} thickness={8} size={100} animated={true} style={{alignSelf: "center",marginTop: 20 }}/>
+        <Progress.Circle
+          progress={progress}
+          showsText={true}
+          thickness={8}
+          size={100}
+          animated={true}
+          style={{ alignSelf: "center", marginTop: 20 }}
+        />
       </View>
     );
   }

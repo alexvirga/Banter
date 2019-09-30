@@ -26,8 +26,8 @@ export default class UserBillSplit extends React.Component {
   };
 
   handleSplit = text => {
-    this.setState({ amt: text.toString() });
-    this.props.handleTotal(text, this.props.user);
+      console.log(text)
+    this.setState({ amt: text.toString() }, () => this.props.handleTotal(text, this.props.user))
   };
 
   render() {
