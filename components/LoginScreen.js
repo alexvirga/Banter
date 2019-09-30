@@ -14,14 +14,17 @@ export default class Login extends Component {
 
 
   handleEmailChange = email => {
+
     this.setState({ email: email });
   };
 
   handlePasswordChange = password => {
+  
     this.setState({ password: password });
   };
 
   handleSubmit = user => {
+
     this.props.clickHandler(this.state);
   };
 

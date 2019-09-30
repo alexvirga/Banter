@@ -6,35 +6,22 @@ import {
   TextInput,
   AsyncStorage,
   TouchableOpacity,
-  Image
+  Image,
+  
 } from "react-native";
-import {
-  List,
-  Input,
-  Button,
-  Card,
-  ListItem,
-  ButtonGroup
-} from "react-native-elements";
+import { ButtonGroup, Button } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
-
 
 export default class NewGroup extends React.Component {
   state = {
     billTotal: 0,
     index: 2,
-    tipPercentage: "",
+    tipPercentage: 20,
     submit: false,
     group: []
   };
 
   handleSubmit = e => {
-    // let theseusers = this.state.group.map(obj => obj.users);
-    // const users = theseusers.flat(1);
-    // if (users.map(user => user.id === this.props.id)){
-    //   alert("You are already in this group")
-    // }
-    // else {
     fetch("http://localhost:3000/groups", {
       headers: {
         "content-type": "application/json",
@@ -42,17 +29,35 @@ export default class NewGroup extends React.Component {
       },
       method: "POST",
       body: JSON.stringify({
+        leader_id: this.props.user.id,
         bill_total: this.state.billTotal,
         group_code: this.props.code,
+        tip_percentage: [10, 15, 20, 0][this.state.index]
       })
     })
       .then(response => response.json())
-      .then(data =>
-        this.setState({group: data, submit: true}));
+      .then(data => this.handleUserGroupSubmit(data));
+  };
+
+  handleUserGroupSubmit = group => {
+    fetch("http://localhost:3000/user_groups", {
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify({
+        user_id: this.props.user.id,
+        group_id: group.id
+      })
+    })
+      .then(response => response.json())
+      .then(data => this.setState({ submit: true }));
   };
 
   handleTotal = num => {
-    this.setState({ billTotal: num });
+    let fixednum = parseFloat(num);
+    this.setState({ billTotal: fixednum });
   };
 
   updateIndex = selectedIndex => {
@@ -64,30 +69,39 @@ export default class NewGroup extends React.Component {
       <WaitingPage
         code={this.props.code}
         user={this.props.user}
-        // group={this.state.group}
-      />)
-    if (this.state.submit === true){
-      return waitingpage
+        index={this.state.index}
+      />
+    );
+    if (this.state.submit === true) {
+      return waitingpage;
     }
 
-    
-    
     const buttons = ["10%", "15%", "20%", "0%"];
-    const { selectedIndex } = this.state.index;
 
     let tipAmt = buttons[this.state.index];
     let tipNum = tipAmt.replace("%", "");
-  
-    
+
     let tipTotal = (this.state.billTotal * tipNum) / 100;
     let billPlusTip = parseFloat(this.state.billTotal) + parseFloat(tipTotal);
     let formattedBillPlusTip = billPlusTip.toFixed(2);
-   
-
-  
 
     return (
       <View style={{ justifyContent: "center", flex: 1 }}>
+        <View          style={{
+              position: 'absolute',
+              left: 5,
+              top: 30,
+          }}
+
+        >
+          <Button onPress={this.props.closeModal}   type="clear"  icon={{
+    name: "clear",
+    size: 30,
+
+  }}          
+          />
+        </View>
+
         <View style={{ marginBottom: 30 }}>
           <Text
             style={{
@@ -122,14 +136,14 @@ export default class NewGroup extends React.Component {
                 letterSpacing: 5
               }}
               keyboardType={"numeric"}
-              value={this.state.billTotal}
+              // value={this.state.billTotal}
               onChangeText={this.handleTotal}
               placeholder="Total Bill Amount"
             />
           </View>
           <ButtonGroup
             onPress={this.updateIndex}
-            selectedIndex={selectedIndex}
+            selectedIndex={this.state.index}
             buttons={buttons}
             containerStyle={{
               height: 30,
@@ -176,17 +190,18 @@ export default class NewGroup extends React.Component {
             ${formattedBillPlusTip}
           </Text>
         </View>
-
-        <TouchableOpacity onPress={this.handleSubmit}>
-          <Image
-            style={{
-              marginTop: 70,
-              justifyContent: "center",
-              alignSelf: "center"
-            }}
-            source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
-          />
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity onPress={this.handleSubmit}>
+            <Image
+              style={{
+                marginTop: 70,
+                justifyContent: "center",
+                alignSelf: "center"
+              }}
+              source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

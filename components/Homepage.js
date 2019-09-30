@@ -3,14 +3,15 @@ import NewGroup from "./NewGroup";
 import {
   Image,
   ScrollView,
-  Text,
+  
   StyleSheet,
   View,
   TextInput,
   AsyncStorage,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from "react-native";
-import { Input, Button } from "react-native-elements";
+import { Input, Button, Text, } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
 
 export default class Homepage extends React.Component {
@@ -20,7 +21,8 @@ export default class Homepage extends React.Component {
     user: this.props.user,
     submitted: false,
     groups: [],
-    createNew: false
+    createNew: false,
+    modalVisible: false
   };
 
   componentDidMount() {
@@ -32,6 +34,14 @@ export default class Homepage extends React.Component {
         })
       );
   }
+
+  setModalVisible(visible) {
+    this.setState({ createNew: true, modalVisible: visible });
+  }
+
+  closeModal = () => {
+    this.setState({modalVisible: false, createNew: false})
+}
 
   handleCodeChange = code => {
     this.setState({ code: code });
@@ -68,16 +78,29 @@ export default class Homepage extends React.Component {
     this.setState({ createNew: true });
   };
 
-  // handleNewGroupSubmit = () => {
-  //   this.setState({code: newRandomCode, submitted: true})
-
-  // }
-
   render() {
+
     let newRandomCode = this.codeGenerator(5);
 
     let renderNewGroup = (
-      <NewGroup code={newRandomCode} newGrouphandler={this.newGrouphandler} user={this.props.user}/>
+      <View>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <NewGroup
+            code={newRandomCode}
+            newGrouphandler={this.newGrouphandler}
+            user={this.state.user}
+            closeModal={this.closeModal}
+
+          />
+        </Modal>
+      </View>
     );
 
     if (this.state.createNew === true) return renderNewGroup;
@@ -91,10 +114,10 @@ export default class Homepage extends React.Component {
     );
 
     if (this.state.submitted === true) return waitingpage;
-
+    
     return (
       <View style={styles.logincomp}>
-        <Text style={{ fontSize: 27, marginBottom: 50 }}>Enter Your Code </Text>
+        <Text style={{ fontSize: 40, marginBottom: 50, fontWeight: 500, color: "#545656"}}>Enter Your Code </Text>
         <TextInput
           autoCapitalize="characters"
           autoCorrect={false}
@@ -113,10 +136,16 @@ export default class Homepage extends React.Component {
 
         <Button
           buttonStyle={styles.button}
-          onPress={() => this.newGrouphandler()}
+          onPress={() => this.setModalVisible(true)}
           title="Generate New Code"
           type="clear"
         />
+        {/* <Button
+          buttonStyle={styles.button}
+          onPress={() => this.logoutHandler}
+          title="Log Out"
+          type="clear"
+        /> */}
 
         <View style={{ margin: 7 }} />
         <TouchableOpacity onPress={this.handleSubmit}>
@@ -140,6 +169,7 @@ const styles = StyleSheet.create({
   },
 
   logincomp: {
+    backgroundColor: "#F2F8FA",
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
