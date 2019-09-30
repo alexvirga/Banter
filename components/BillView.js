@@ -16,6 +16,7 @@ import {
   ListItem,
   ButtonGroup
 } from "react-native-elements";
+import * as Progress from 'react-native-progress';
 import UserBillSplit from "./UserBillSplit";
 
 export default class BillView extends React.Component {
@@ -82,6 +83,8 @@ export default class BillView extends React.Component {
     let baseBill = splitBillAmt[0];
     let floatBill = splitBillAmt[1];
 
+    let progress= floatBillAmt/billTotal
+
     
 
     backgroundchange = () => {
@@ -90,7 +93,7 @@ export default class BillView extends React.Component {
       else
       return "red"}
 
-      
+
       
     
 
@@ -192,7 +195,7 @@ export default class BillView extends React.Component {
           </Text>
 
           <Text style={{ padding: 10, flex: 1, alignSelf: "center" }}>
-            + ${(reducedTotal * tip) / 100} tip
+            + ${((reducedTotal * tip) / 100).toFixed(2)} tip
           </Text>
 
           <Text
@@ -213,6 +216,7 @@ export default class BillView extends React.Component {
           </Text>
 
         </View>
+        <Progress.Circle progress={progress}  showsText={true} thickness={8} size={100} animated={true} style={{alignSelf: "center",marginTop: 20 }}/>
       </View>
     );
   }

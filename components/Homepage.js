@@ -3,7 +3,7 @@ import NewGroup from "./NewGroup";
 import {
   Image,
   ScrollView,
-  Text,
+  
   StyleSheet,
   View,
   TextInput,
@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Modal
 } from "react-native";
-import { Input, Button } from "react-native-elements";
+import { Input, Button, Text, } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
 
 export default class Homepage extends React.Component {
@@ -114,10 +114,10 @@ export default class Homepage extends React.Component {
     );
 
     if (this.state.submitted === true) return waitingpage;
-
+    
     return (
       <View style={styles.logincomp}>
-        <Text style={{ fontSize: 27, marginBottom: 50 }}>Enter Your Code </Text>
+        <Text style={{ fontSize: 40, marginBottom: 50, fontWeight: 500, color: "#545656"}}>Enter Your Code </Text>
         <TextInput
           autoCapitalize="characters"
           autoCorrect={false}
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
   },
 
   logincomp: {
+    backgroundColor: "#F2F8FA",
     alignItems: "center",
     flex: 1,
     justifyContent: "center",

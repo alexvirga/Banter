@@ -3,6 +3,12 @@ import { AsyncStorage, StyleSheet } from "react-native";
 import LoginScreen from "./components/LoginScreen";
 import Homepage from "./components/Homepage";
 import ActionCableProvider from "react-actioncable-provider";
+import {
+
+  View,
+ 
+
+} from "react-native";
 
 class App extends React.Component {
   state = {
@@ -102,21 +108,15 @@ class App extends React.Component {
 
 
     return (
-      // <ActionCableProvider url="ws://localhost:3000/cable">
+      
       this.page()
-      // </ActionCableProvider>
+      
+
     );
   }
 }
 
-// const MainNavigator = createStackNavigator(
-//   {
-//     Login: LoginScreen,
-//     Homepage: Homepage,
-//     WaitingPage: WaitingPage
-//   },{
-//     initialRouteName: "App"
-//   });
+
 
 const styles = StyleSheet.create({
   loggedin: {
@@ -126,6 +126,5 @@ const styles = StyleSheet.create({
     padding: 20
   }
 });
-// const App = createAppContainer(MainNavigator);
 
 export default App;

@@ -44,7 +44,7 @@ export default class UserBillSplit extends React.Component {
           flexDirection: "row"
         }}
       >
-        <Text style={{ padding: 10, flex: 1, alignSelf:"center" }}>
+        <Text style={{ padding: 10, flex: 1, fontSize: 14, alignSelf:"center" }}>
           {this.props.user.user.username}
         </Text>
 
