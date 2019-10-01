@@ -26,7 +26,7 @@ export default class UserBillSplit extends React.Component {
   };
 
   handleSplit = text => {
-      console.log(text)
+    
     this.setState({ amt: text.toString() }, () => this.props.handleTotal(text, this.props.user))
   };
 
@@ -44,7 +44,7 @@ export default class UserBillSplit extends React.Component {
           flexDirection: "row"
         }}
       >
-        <Text style={{ padding: 10, flex: 1, fontSize: 14, alignSelf:"center" }}>
+        <Text style={{ padding: 10, flex: 1, fontSize: 14, alignSelf:"auto", flexWrap: "nowrap"}}>
           {this.props.user.user.username}
         </Text>
 
@@ -53,6 +53,9 @@ export default class UserBillSplit extends React.Component {
               padding: 10,
             flex: 1,
             alignSelf:"center",
+            backgroundColor: "lightgrey",
+            
+            
  
             
           }}
