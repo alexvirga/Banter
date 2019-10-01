@@ -24,11 +24,12 @@ export default class BillView extends React.Component {
   state = {
     users: [],
     user_amt: 0,
-    updated: 100
+    updated: 100,
+    me: this.props.user
   };
 
   componentDidMount() {
-    this.timer = setInterval(()=> this.autoRefresh(), 1000)
+    this.timer = setInterval(()=> this.autoRefresh(), 3000)
     fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
       .then(resp => resp.json())
       .then(data => {
@@ -97,6 +98,7 @@ export default class BillView extends React.Component {
   };
 
   render() {
+    console.log(this.state.me)
     //Sum of all user payment amounts
     let totalArray = this.state.users.map(user => user.user_payment_amt);
     let reducedTotal = totalArray.reduce((a, b) => a + b, 0);
@@ -212,6 +214,7 @@ export default class BillView extends React.Component {
               >
                 {this.state.users.map(user => (
                   <UserBillSplit
+                  me={this.state.me}
                     evenSplit={splitToString}
                     handleTotal={this.handleTotal}
                     user={user}
