@@ -49,6 +49,7 @@ export default class UserBillSplit extends React.Component {
         </Text>
 
         <TextInput
+        keyboardType={"numeric"}
           style={{
               padding: 10,
             flex: 1,

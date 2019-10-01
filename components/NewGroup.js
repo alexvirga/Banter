@@ -7,7 +7,9 @@ import {
   AsyncStorage,
   TouchableOpacity,
   Image,
-  Modal
+  Modal,
+  Keyboard,
+  TouchableWithoutFeedback
 } from "react-native";
 import { ButtonGroup, Button } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
@@ -25,7 +27,7 @@ export default class NewGroup extends React.Component {
   };
 
   handleSubmit = e => {
-    fetch("http://localhost:3000/groups", {
+    fetch("https://evening-mountain-63500.herokuapp.com/groups", {
       headers: {
         "content-type": "application/json",
         accept: "application/json"
@@ -43,7 +45,7 @@ export default class NewGroup extends React.Component {
   };
 
   handleUserGroupSubmit = group => {
-    fetch("http://localhost:3000/user_groups", {
+    fetch("https://evening-mountain-63500.herokuapp.com/user_groups", {
       headers: {
         "content-type": "application/json",
         accept: "application/json"
@@ -99,6 +101,7 @@ export default class NewGroup extends React.Component {
 
 
     let renderNewGroup = (
+      
       <View>
         <Modal
           animationType="slide"
@@ -119,6 +122,8 @@ export default class NewGroup extends React.Component {
 
 
     return (
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+
       <View style={{ justifyContent: "center", flex: 1 }}>
         <View
           style={{
@@ -244,6 +249,7 @@ export default class NewGroup extends React.Component {
           </TouchableOpacity>
         </View>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

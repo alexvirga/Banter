@@ -22,7 +22,7 @@ export default class WaitingPage extends React.Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:3000/groups")
+    fetch("https://evening-mountain-63500.herokuapp.com/groups")
       .then(resp => resp.json())
       .then(data =>
         this.setState({
@@ -34,7 +34,7 @@ export default class WaitingPage extends React.Component {
   }
 
   handleSubmit = e => {
-    fetch("http://localhost:3000/user_groups", {
+    fetch("https://evening-mountain-63500.herokuapp.com/user_groups", {
       headers: {
         "content-type": "application/json",
         accept: "application/json"

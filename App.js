@@ -20,9 +20,9 @@ class App extends React.Component {
     user: ""
   };
 
-  // static navigationOptions = {
-  //   header: null
-  // };
+  static navigationOptions = {
+    header: null
+  };
   componentDidMount() {
     this.autoLogin();
   }
@@ -33,7 +33,7 @@ class App extends React.Component {
         const value = await AsyncStorage.getItem("token");
 
         if (value !== null) {
-          fetch(`http://localhost:3000/autologin`, {
+          fetch(`https://evening-mountain-63500.herokuapp.com/autologin`, {
             headers: {
               accept: "application/json",
               Authorization: value
@@ -42,7 +42,7 @@ class App extends React.Component {
             .then(resp => resp.json())
             .then(data => {
               this.setState({ user: data.email });
-              console.log(data.token);
+              // console.log(data.token);
               if (data.error) {
                 alert(data.error);
               } else {
@@ -51,7 +51,9 @@ class App extends React.Component {
               }
             });
         }
-      } catch (error) {
+      } 
+      catch (error)
+       {
         alert("user not found");
       }
     };
@@ -61,7 +63,7 @@ class App extends React.Component {
   clickHandler = user => {
     let email = user.email;
     let password = user.password;
-    fetch("http://localhost:3000/login", {
+    fetch("https://evening-mountain-63500.herokuapp.com/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -74,6 +76,7 @@ class App extends React.Component {
     })
       .then(resp => resp.json())
       .then(response => {
+        console.log("BEEF",response)
         if (response.token === undefined) {
           alert(response.errors);
         } else {

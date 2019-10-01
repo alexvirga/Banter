@@ -28,7 +28,7 @@ export default class BillView extends React.Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:3000/user_groups")
+    fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
       .then(resp => resp.json())
       .then(data => {
         this.setState({
@@ -38,7 +38,7 @@ export default class BillView extends React.Component {
   }
 
   handleTotal = (text, user) => {
-    fetch("http://localhost:3000/user_groups", {
+    fetch("https://evening-mountain-63500.herokuapp.com/user_groups", {
       headers: {
         "content-type": "application/json",
         accept: "application/json"
@@ -53,7 +53,7 @@ export default class BillView extends React.Component {
     })
       .then(response => response.json())
       .then(() => {
-        fetch("http://localhost:3000/user_groups")
+        fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
           .then(resp => resp.json())
           .then(data => {
             this.setState({
@@ -64,7 +64,7 @@ export default class BillView extends React.Component {
   };
 
   // fetcher = () => {
-  //   fetch("http://localhost:3000/user_groups")
+  //   fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
   //     .then(resp => resp.json())
   //     .then(data => {
   //       console.log(data.filter(user => user.group_id === this.props.group_id));

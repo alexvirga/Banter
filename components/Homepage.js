@@ -3,16 +3,20 @@ import NewGroup from "./NewGroup";
 import {
   Image,
   ScrollView,
-  
+  Keyboard,
   StyleSheet,
   View,
   TextInput,
   AsyncStorage,
   TouchableOpacity,
-  Modal
+  Modal, 
+  TouchableWithoutFeedback
 } from "react-native";
 import { Input, Button, Text, } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
+
+
+
 
 export default class Homepage extends React.Component {
   state = {
@@ -26,7 +30,7 @@ export default class Homepage extends React.Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:3000/groups")
+    fetch("https://evening-mountain-63500.herokuapp.com/groups")
       .then(resp => resp.json())
       .then(data =>
         this.setState({
@@ -34,6 +38,7 @@ export default class Homepage extends React.Component {
         })
       );
   }
+  
 
   setModalVisible(visible) {
     this.setState({ createNew: true, modalVisible: visible });
@@ -80,9 +85,11 @@ export default class Homepage extends React.Component {
 
   render() {
 
+
     let newRandomCode = this.codeGenerator(5);
 
     let renderNewGroup = (
+     
       <View>
         <Modal
           animationType="slide"
@@ -116,9 +123,11 @@ export default class Homepage extends React.Component {
     if (this.state.submitted === true) return waitingpage;
     
     return (
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.logincomp}>
         <Text style={{ fontSize: 40, marginBottom: 50, fontWeight: 500, color: "#545656"}}>Enter Your Code </Text>
         <TextInput
+        
           autoCapitalize="characters"
           autoCorrect={false}
           maxLength={5}
@@ -159,6 +168,8 @@ export default class Homepage extends React.Component {
           />
         </TouchableOpacity>
       </View>
+      </TouchableWithoutFeedback>
+
     );
   }
 }
