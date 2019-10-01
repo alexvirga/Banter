@@ -28,14 +28,30 @@ export default class BillView extends React.Component {
   };
 
   componentDidMount() {
+    this.timer = setInterval(()=> this.autoRefresh(), 1000)
     fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
       .then(resp => resp.json())
       .then(data => {
         this.setState({
-          users: data.filter(user => user.group_id === this.props.group_id)
+          users: data.filter(user => user.group_id === this.props.group_id).sort((a,b) => (a.user.username > b.user.username) ? 1 : ((b.user.username > a.user.username) ? -1 : 0))
+        });
+      });
+
+  }
+
+
+  
+  async autoRefresh(){
+    fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
+      .then(resp => resp.json())
+      .then(data => {
+        this.setState({
+          users: data.filter(user => user.group_id === this.props.group_id).sort((a,b) => (a.user.username > b.user.username) ? 1 : ((b.user.username > a.user.username) ? -1 : 0))
         });
       });
   }
+
+  
 
   handleTotal = (text, user) => {
     fetch("https://evening-mountain-63500.herokuapp.com/user_groups", {
@@ -57,7 +73,7 @@ export default class BillView extends React.Component {
           .then(resp => resp.json())
           .then(data => {
             this.setState({
-              users: data.filter(user => user.group_id === this.props.group_id)
+              users: data.filter(user => user.group_id === this.props.group_id).sort((a,b) => (a.user.username > b.user.username) ? 1 : ((b.user.username > a.user.username) ? -1 : 0))
             });
           });
       });
@@ -113,7 +129,7 @@ export default class BillView extends React.Component {
     // let remaining = billTotal - floatBillAmt
     let calculatedTipLeft =
       totalTipAmt - ((reducedTotal * tip) / 100).toFixed(2);
-    console.log(calculatedTipLeft);
+    
 
     remaining = () => {
       if (floatBillAmt <= billTotal[0]) {

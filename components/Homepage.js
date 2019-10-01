@@ -9,14 +9,11 @@ import {
   TextInput,
   AsyncStorage,
   TouchableOpacity,
-  Modal, 
+  Modal,
   TouchableWithoutFeedback
 } from "react-native";
-import { Input, Button, Text, } from "react-native-elements";
+import { Input, Button, Text } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
-
-
-
 
 export default class Homepage extends React.Component {
   state = {
@@ -38,15 +35,14 @@ export default class Homepage extends React.Component {
         })
       );
   }
-  
 
   setModalVisible(visible) {
     this.setState({ createNew: true, modalVisible: visible });
   }
 
   closeModal = () => {
-    this.setState({modalVisible: false, createNew: false})
-}
+    this.setState({ modalVisible: false, createNew: false });
+  };
 
   handleCodeChange = code => {
     this.setState({ code: code });
@@ -84,12 +80,9 @@ export default class Homepage extends React.Component {
   };
 
   render() {
-
-
     let newRandomCode = this.codeGenerator(5);
 
     let renderNewGroup = (
-     
       <View>
         <Modal
           animationType="slide"
@@ -104,7 +97,6 @@ export default class Homepage extends React.Component {
             newGrouphandler={this.newGrouphandler}
             user={this.state.user}
             closeModal={this.closeModal}
-
           />
         </Modal>
       </View>
@@ -121,55 +113,62 @@ export default class Homepage extends React.Component {
     );
 
     if (this.state.submitted === true) return waitingpage;
-    
+
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.logincomp}>
-        <Text style={{ fontSize: 40, marginBottom: 50, fontWeight: 500, color: "#545656"}}>Enter Your Code </Text>
-        <TextInput
-        
-          autoCapitalize="characters"
-          autoCorrect={false}
-          maxLength={5}
-          value={this.state.email}
-          onChangeText={this.handleCodeChange}
-          style={{
-            textAlign: "center",
-            width: 200,
-            height: 60,
-            fontSize: 60,
-            letterSpacing: 25
-          }}
-          placeholder="C9QNX"
-        />
+        <View style={styles.logincomp}>
+          <Text
+            style={{
+              fontSize: 40,
+              marginBottom: 50,
+              fontWeight: 500,
+              color: "#545656"
+            }}
+          >
+            Enter Your Code{" "}
+          </Text>
+          <TextInput
+            autoCapitalize="characters"
+            autoCorrect={false}
+            maxLength={5}
+            value={this.state.email}
+            onChangeText={this.handleCodeChange}
+            style={{
+              textAlign: "center",
+              width: 200,
+              height: 60,
+              fontSize: 60,
+              letterSpacing: 25
+            }}
+            placeholder="C9QNX"
+          />
 
-        <Button
-          buttonStyle={styles.button}
-          onPress={() => this.setModalVisible(true)}
-          title="Generate New Code"
-          type="clear"
-        />
-        {/* <Button
+          <Button
+            buttonStyle={styles.button}
+            onPress={() => this.setModalVisible(true)}
+            title="Generate New Code"
+            type="clear"
+          />
+          {/* <Button
           buttonStyle={styles.button}
           onPress={() => this.logoutHandler}
           title="Log Out"
           type="clear"
         /> */}
 
-        <View style={{ margin: 7 }} />
-        <TouchableOpacity onPress={this.handleSubmit}>
-          <Image
-            style={{
-              opacity: this.state.buttonOpacity,
-              marginTop: 50,
-              justifyContent: "center"
-            }}
-            source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
-          />
-        </TouchableOpacity>
-      </View>
+          <View style={{ margin: 7 }} />
+          <TouchableOpacity onPress={this.handleSubmit}>
+            <Image
+              style={{
+                opacity: this.state.buttonOpacity,
+                marginTop: 50,
+                justifyContent: "center"
+              }}
+              source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
+            />
+          </TouchableOpacity>
+        </View>
       </TouchableWithoutFeedback>
-
     );
   }
 }

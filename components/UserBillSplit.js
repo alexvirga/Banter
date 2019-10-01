@@ -26,6 +26,11 @@ export default class UserBillSplit extends React.Component {
   };
 
   handleSplit = text => {
+    console.log("Text", text)
+    if (text === "" ){
+      this.setState({ amt: ""}, () => this.props.handleTotal(0, this.props.user))}
+    
+    else
     
     this.setState({ amt: text.toString() }, () => this.props.handleTotal(text, this.props.user))
   };
@@ -49,7 +54,7 @@ export default class UserBillSplit extends React.Component {
         </Text>
 
         <TextInput
-        keyboardType={"numeric"}
+        
           style={{
               padding: 10,
             flex: 1,
