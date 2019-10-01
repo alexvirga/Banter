@@ -7,10 +7,13 @@ import {
   AsyncStorage,
   TouchableOpacity,
   Image,
-  
+  Modal,
+  Keyboard,
+  TouchableWithoutFeedback
 } from "react-native";
 import { ButtonGroup, Button } from "react-native-elements";
 import WaitingPage from "./WaitingPage";
+import Camera from "./Camera"
 
 export default class NewGroup extends React.Component {
   state = {
@@ -18,11 +21,13 @@ export default class NewGroup extends React.Component {
     index: 2,
     tipPercentage: 20,
     submit: false,
-    group: []
+    group: [],
+    viewCamera: false,
+    modalVisible: false
   };
 
   handleSubmit = e => {
-    fetch("http://localhost:3000/groups", {
+    fetch("https://evening-mountain-63500.herokuapp.com/groups", {
       headers: {
         "content-type": "application/json",
         accept: "application/json"
@@ -40,7 +45,7 @@ export default class NewGroup extends React.Component {
   };
 
   handleUserGroupSubmit = group => {
-    fetch("http://localhost:3000/user_groups", {
+    fetch("https://evening-mountain-63500.herokuapp.com/user_groups", {
       headers: {
         "content-type": "application/json",
         accept: "application/json"
@@ -64,6 +69,14 @@ export default class NewGroup extends React.Component {
     this.setState({ index: selectedIndex });
   };
 
+  setModalVisible(visible) {
+    this.setState({ viewCamera: true, modalVisible: visible });
+  }
+
+  closeModal = () => {
+    this.setState({modalVisible: false, viewCamera: false})
+}
+
   render() {
     let waitingpage = (
       <WaitingPage
@@ -85,24 +98,57 @@ export default class NewGroup extends React.Component {
     let billPlusTip = parseFloat(this.state.billTotal) + parseFloat(tipTotal);
     let formattedBillPlusTip = billPlusTip.toFixed(2);
 
-    return (
-      <View style={{ justifyContent: "center", flex: 1 }}>
-        <View          style={{
-              position: 'absolute',
-              left: 5,
-              top: 30,
+
+
+    let renderNewGroup = (
+      
+      <View>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
           }}
-
         >
-          <Button onPress={this.props.closeModal}   type="clear"  icon={{
-    name: "clear",
-    size: 30,
+          <Camera
+            closeModal={this.closeModal}
+          />
+        </Modal>
+      </View>
+    );
 
-  }}          
+    if (this.state.viewCamera === true) return renderNewGroup;
+
+
+    return (
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+
+      <View style={{ justifyContent: "center", flex: 1 }}>
+        <View
+          style={{
+            position: "absolute",
+            left: 5,
+            top: 30
+          }}
+        >
+          <Button
+            onPress={this.props.closeModal}
+            type="clear"
+            icon={{
+              name: "clear",
+              size: 30
+            }}
           />
         </View>
 
         <View style={{ marginBottom: 30 }}>
+          <Button
+            onPress={() => this.setModalVisible(true)}
+            title="Upload Reciept"
+            type="clear"
+          />
+
           <Text
             style={{
               textAlign: "center",
@@ -203,6 +249,7 @@ export default class NewGroup extends React.Component {
           </TouchableOpacity>
         </View>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

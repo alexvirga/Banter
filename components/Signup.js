@@ -15,7 +15,7 @@ export default class Signup extends Component {
   signupHandler=(user)=>{
       {
         if (this.state.password === this.state.password2) {
-            fetch("http://localhost:3000/users", {
+            fetch("https://evening-mountain-63500.herokuapp.com/users", {
                 headers: {
                     'content-type': 'application/json',
                     'accept': 'application/json'
