@@ -87,10 +87,14 @@ export default class NewGroup extends React.Component {
   processURI = uri => {
     console.log(uri);
     return (
-      <Image
-        source={{ uri: `${this.state.uri}` }}
-        style={{ width: 150, height: 200 }}
-      />
+      <View
+        style={{ justifyContent: "flex-start", alignSelf: "center", flex: 0.3 , marginBottom: 15}}
+      >
+        <Image
+          source={{ uri: `${this.state.uri}` }}
+          style={{ height: 105, width: 60 }}
+        />
+      </View>
     );
   };
 
@@ -136,138 +140,139 @@ export default class NewGroup extends React.Component {
     if (this.state.viewCamera === true) return renderNewGroup;
 
     return (
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={{ justifyContent: "center", flex: 1 }}>
-          <View
-            style={{
-              position: "absolute",
-              left: 5,
-              top: 30
+      <View style={{ justifyContent: "center", flex: 1 }}>
+        <View
+          style={{
+            position: "absolute",
+            left: 5,
+            top: 30
+          }}
+        >
+          <Button
+            onPress={this.props.closeModal}
+            type="clear"
+            icon={{
+              name: "clear",
+              size: 30
             }}
+          />
+        </View>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View
+            style={{justifyContent: "flex-start", flex: 1, marginTop: 100 }}
           >
-            <Button
-              onPress={this.props.closeModal}
-              type="clear"
-              icon={{
-                name: "clear",
-                size: 30
-              }}
-            />
-          </View>
-          <View style={{ justifyContent: "center", alignSelf: "center"}}>
             {this.processURI()}
-          </View>
-
-          <View style={{ marginBottom: 30 }}>
-            <Button
-              onPress={() => this.setModalVisible(true)}
-              title="Upload Reciept"
-              type="clear"
-            />
-
-            <Text
-              style={{
-                textAlign: "center",
-                width: 400,
-                height: 60,
-                fontSize: 60,
-                letterSpacing: 10,
-                marginBottom: 30
-              }}
-            >
-              {this.props.code}
-            </Text>
-          </View>
-          <View>
-            <View style={{ justifyContent: "center", flexDirection: "row" }}>
+            <View style={{ marginBottom: 30, marginTop: 20 }}>
+              <Button
+                onPress={() => this.setModalVisible(true)}
+                title="Upload Receipt"
+                type="clear"
+              />
+              </View>
+<View>
               <Text
                 style={{
-                  fontSize: 45,
-                  color: "darkgrey"
+                  textAlign: "center",
+                  width: 400,
+                  height: 60,
+                  fontSize: 60,
+                  letterSpacing: 10,
+                  marginBottom: 30
                 }}
               >
-                {" "}
-                ${" "}
+                {this.props.code}
               </Text>
-              <TextInput
-                style={{
-                  textAlign: "center",
-                  width: 300,
-                  height: 60,
-                  fontSize: 40,
-                  letterSpacing: 5
+            </View>
+            <View>
+              <View style={{ justifyContent: "center", flexDirection: "row" }}>
+                <Text
+                  style={{
+                    fontSize: 45,
+                    color: "darkgrey"
+                  }}
+                >
+                  ${" "}
+                </Text>
+                <TextInput
+                  style={{
+                    textAlign: "center",
+                    width: 300,
+                    height: 60,
+                    fontSize: 40,
+                    letterSpacing: 5
+                  }}
+                  keyboardType={"numeric"}
+                  // value={this.state.billTotal}
+                  onChangeText={this.handleTotal}
+                  placeholder="Total Bill Amount"
+                />
+              </View>
+
+              <ButtonGroup
+                onPress={this.updateIndex}
+                selectedIndex={this.state.index}
+                buttons={buttons}
+                containerStyle={{
+                  height: 30,
+                  width: 200,
+                  justifyContent: "center",
+                  alignSelf: "center",
+                  marginBottom: 15
                 }}
-                keyboardType={"numeric"}
-                // value={this.state.billTotal}
-                onChangeText={this.handleTotal}
-                placeholder="Total Bill Amount"
               />
             </View>
-            <Image source={{ uri: `${this.state.uri}` }} />
-            <ButtonGroup
-              onPress={this.updateIndex}
-              selectedIndex={this.state.index}
-              buttons={buttons}
-              containerStyle={{
-                height: 30,
-                width: 200,
-                justifyContent: "center",
-                alignSelf: "center",
-                marginBottom: 15
-              }}
-            />
-          </View>
 
-          <Text
-            style={{
-              justifyContent: "center",
-              alignSelf: "center",
-              marginBottom: 20
-            }}
-          >
-            {" "}
-            {buttons[this.state.index]} = ${tipTotal.toFixed(2)}
-          </Text>
-
-          <View>
             <Text
               style={{
                 justifyContent: "center",
                 alignSelf: "center",
-                marginBottom: 10,
-                marginTop: 30
+                marginBottom: 20
               }}
             >
-              You Owe:
+              {" "}
+              {buttons[this.state.index]} = ${tipTotal.toFixed(2)}
             </Text>
-            <Text
-              style={{
-                textAlign: "center",
-                width: 400,
-                height: 60,
-                fontSize: 60,
-                letterSpacing: 5,
-                marginTop: 10
-              }}
-            >
-              ${formattedBillPlusTip}
-            </Text>
-          </View>
 
-          <View>
-            <TouchableOpacity onPress={this.handleSubmit}>
-              <Image
+            <View>
+              <Text
                 style={{
-                  marginTop: 70,
                   justifyContent: "center",
-                  alignSelf: "center"
+                  alignSelf: "center",
+                  marginBottom: 10,
+                  marginTop: 30
                 }}
-                source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
-              />
-            </TouchableOpacity>
+              >
+                You Owe:
+              </Text>
+              <Text
+                style={{
+                  textAlign: "center",
+                  width: 400,
+                  height: 60,
+                  fontSize: 60,
+                  letterSpacing: 5,
+                  marginTop: 10
+                }}
+              >
+                ${formattedBillPlusTip}
+              </Text>
+            </View>
+
+            <View>
+              <TouchableOpacity onPress={this.handleSubmit}>
+                <Image
+                  style={{
+                    marginTop: 70,
+                    justifyContent: "center",
+                    alignSelf: "center"
+                  }}
+                  source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </View>
     );
   }
 }

@@ -25,6 +25,7 @@ export default class CameraExample extends React.Component {
        .then(photo => {
           photo.exif.Orientation = 1;
           this.props.handleImgURI(photo.uri)
+          
                              
            });     
      }

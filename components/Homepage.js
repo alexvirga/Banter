@@ -121,7 +121,7 @@ export default class Homepage extends React.Component {
             style={{
               fontSize: 40,
               marginBottom: 50,
-              fontWeight: 500,
+              
               color: "#545656"
             }}
           >
