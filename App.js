@@ -5,98 +5,89 @@ import {
   Text,
   Animated,
   View,
-  TextInput
+  TextInput,
+  Image,
+  Button
 } from "react-native";
-import Login from "./components/LoginScreen"
-import Homepage from "./components/Homepage"
-import AppApp from "./components/AppApp"
-
+import Login from "./components/LoginScreen";
+import Homepage from "./components/Homepage";
+import AppApp from "./components/AppApp";
+import WaitingPage from "./components/WaitingPage";
+import ProfileScreen from "./components/ProfileScreen"
 
 import { RectButton } from "react-native-gesture-handler";
 
 import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
 
-const TYPES = ["back", "back", "back", "back"];
-const PARALLAX = [false, false, true, false];
+class Page extends Component {
+  render() {
+    console.log(this.props.selected);
 
-const Page = ({}) => (
-  <View style={styles.page}>
-      <AppApp/>
-  </View>
-);
+    let buttonpages = () => {
+      if (this.props.selected === "your groups") {
+        return <ProfileScreen/>;
+      } else return <AppApp />;
+    };
+
+    return <View style={styles.page}>{buttonpages()}</View>;
+  }
+}
 
 export default class App extends Component {
-  state = { fromLeft: true, type: 1 };
-
-  renderParallaxDrawer = progressValue => {
-    const parallax = progressValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [this.state.fromLeft ? -50 : 50, 0]
-    });
-    const animatedStyles = {
-      transform: [{ translateX: parallax }]
-    };
-    return (
-      <Animated.View style={[styles.drawerContainer, animatedStyles]}>
-        <Text style={styles.drawerText}>I am in the drawer!</Text>
-        <Text style={styles.drawerText}>
-          Watch parallax animation while you pull the drawer!
-        </Text>
-      </Animated.View>
-    );
+  state = {
+    path: ""
   };
 
   renderDrawer = () => {
     return (
       <View style={styles.drawerContainer}>
-        <Text style={styles.drawerText}>I am in the drawer!</Text>
+        <Image
+          style={{
+            marginTop: 19,
+            height: 100,
+            width: 100,
+            justifyContent: "center",
+            alignSelf: "center"
+          }}
+          source={require("./assets/banter.png")}
+        />
+        <Image
+          style={{
+            marginTop: 32,
+            marginBottom: 50,
+            height: 50,
+            width: 50,
+            justifyContent: "center",
+            alignSelf: "center"
+          }}
+          source={require("./assets/user2.png")}
+        />
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Button
+            title="Home"
+            onPress={() => this.setState({ path: "home" })}
+          />
+          <Button
+            title="Your Groups"
+            onPress={() => this.setState({ path: "your groups" })}
+          />
+        </View>
       </View>
     );
   };
 
   render() {
-    const drawerType = TYPES[this.state.type];
-    const parallax = PARALLAX[this.state.type];
     return (
       <View style={styles.container}>
         <DrawerLayout
-          ref={drawer => {
-            this.drawer = drawer;
-          }}
           drawerWidth={170}
           keyboardDismissMode="on-drag"
           drawerPosition={DrawerLayout.positions.Left}
           drawerType={"back"}
           drawerBackgroundColor="#ddd"
-          renderNavigationView={
-            parallax ? this.renderParallaxDrawer : this.renderDrawer
-          }
-          contentContainerStyle={
-            // careful; don't elevate the child container
-            // over top of the drawer when the drawer is supposed
-            // to be in front - you won't be able to see/open it.
-            drawerType === "back"
-              ? {}
-              : Platform.select({
-                  ios: {
-                    shadowColor: "#000",
-                    shadowOpacity: 0.5,
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowRadius: 60
-                  },
-                  android: {
-                    elevation: 100,
-                    backgroundColor: "#000"
-                  }
-                })
-          }
+          renderNavigationView={this.renderDrawer}
         >
-          <Page
-            type={"back"}
-            fromLeft={this.state.fromLeft}
-            parallaxOn={parallax}
-            openDrawer={() => this.drawer.openDrawer()}
-          />
+          <Page selected={this.state.path} type={"back"} fromLeft={true} />
         </DrawerLayout>
       </View>
     );
@@ -145,7 +136,7 @@ const styles = StyleSheet.create({
   },
   drawerText: {
     margin: 10,
-    marginTop:35,
+    marginTop: 35,
     fontSize: 15,
     textAlign: "left"
   }

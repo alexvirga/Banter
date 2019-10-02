@@ -36,6 +36,8 @@ export default class Homepage extends React.Component {
       );
   }
 
+  
+
   setModalVisible(visible) {
     this.setState({ createNew: true, modalVisible: visible });
   }
