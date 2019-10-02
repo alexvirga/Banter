@@ -98,7 +98,7 @@ export default class BillView extends React.Component {
   };
 
   render() {
-    console.log(this.state.me)
+    
     //Sum of all user payment amounts
     let totalArray = this.state.users.map(user => user.user_payment_amt);
     let reducedTotal = totalArray.reduce((a, b) => a + b, 0);
