@@ -121,7 +121,7 @@ export default class Homepage extends React.Component {
             style={{
               fontSize: 40,
               marginBottom: 50,
-              
+
               color: "#545656"
             }}
           >
@@ -179,7 +179,6 @@ const styles = StyleSheet.create({
   },
 
   logincomp: {
-    backgroundColor: "#F2F8FA",
     alignItems: "center",
     flex: 1,
     justifyContent: "center",

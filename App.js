@@ -1,134 +1,152 @@
-import React from "react";
-import { AsyncStorage, StyleSheet } from "react-native";
-import LoginScreen from "./components/LoginScreen";
-import Homepage from "./components/Homepage";
-import ActionCableProvider from "react-actioncable-provider";
+import React, { Component } from "react";
 import {
-
+  Platform,
+  StyleSheet,
+  Text,
+  Animated,
   View,
- 
-
+  TextInput
 } from "react-native";
+import Login from "./components/LoginScreen"
+import Homepage from "./components/Homepage"
+import AppApp from "./components/AppApp"
 
 
-class App extends React.Component {
-  state = {
-    email: "",
-    password: "",
-    isLoggedIn: false,
-    message: "",
-    user: ""
-  };
+import { RectButton } from "react-native-gesture-handler";
 
-  static navigationOptions = {
-    header: null
-  };
-  componentDidMount() {
-    this.autoLogin();
-  }
+import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
 
-  autoLogin = () => {
-    _retrieveData = async () => {
-      try {
-        const value = await AsyncStorage.getItem("token");
+const TYPES = ["back", "back", "back", "back"];
+const PARALLAX = [false, false, true, false];
 
-        if (value !== null) {
-          fetch(`https://evening-mountain-63500.herokuapp.com/autologin`, {
-            headers: {
-              accept: "application/json",
-              Authorization: value
-            }
-          })
-            .then(resp => resp.json())
-            .then(data => {
-              this.setState({ user: data.email });
-              // console.log(data.token);
-              if (data.error) {
-                alert(data.error);
-              } else {
-                // AsyncStorage.setItem('user', data)
-                this.setState({ isLoggedIn: true });
-              }
-            });
-        }
-      } 
-      catch (error)
-       {
-        alert("user not found");
-      }
+const Page = ({}) => (
+  <View style={styles.page}>
+      <AppApp/>
+  </View>
+);
+
+export default class App extends Component {
+  state = { fromLeft: true, type: 1 };
+
+  renderParallaxDrawer = progressValue => {
+    const parallax = progressValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [this.state.fromLeft ? -50 : 50, 0]
+    });
+    const animatedStyles = {
+      transform: [{ translateX: parallax }]
     };
-    _retrieveData();
-  };
-
-  clickHandler = user => {
-    let email = user.email;
-    let password = user.password;
-    fetch("https://evening-mountain-63500.herokuapp.com/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
-    })
-      .then(resp => resp.json())
-      .then(response => {
-        console.log("BEEF",response)
-        if (response.token === undefined) {
-          alert(response.errors);
-        } else {
-          this.setState({ isLoggedIn: true, user: response.email });
-          _storeData = async () => {
-            try {
-              await AsyncStorage.setItem("token", response.token);
-              // await AsyncStorage.setItem("user", response);
-            } catch (error) {
-              alert(error);
-            }
-          };
-          _storeData();
-          return homepage;
-        }
-      });
-  };
-
-  page() {
-    let homepage = <Homepage user={this.state.user} />;
-    let loginscreen = (
-      <LoginScreen
-        clickHandler={this.clickHandler}
-        onLoginPress={() => this.setState({ isLoggedIn: true })}
-      />
+    return (
+      <Animated.View style={[styles.drawerContainer, animatedStyles]}>
+        <Text style={styles.drawerText}>I am in the drawer!</Text>
+        <Text style={styles.drawerText}>
+          Watch parallax animation while you pull the drawer!
+        </Text>
+      </Animated.View>
     );
+  };
 
-    if (this.state.isLoggedIn) return homepage;
-    else return loginscreen;
-  }
+  renderDrawer = () => {
+    return (
+      <View style={styles.drawerContainer}>
+        <Text style={styles.drawerText}>I am in the drawer!</Text>
+      </View>
+    );
+  };
 
   render() {
-
-
+    const drawerType = TYPES[this.state.type];
+    const parallax = PARALLAX[this.state.type];
     return (
-      
-      this.page()
-      
-
+      <View style={styles.container}>
+        <DrawerLayout
+          ref={drawer => {
+            this.drawer = drawer;
+          }}
+          drawerWidth={170}
+          keyboardDismissMode="on-drag"
+          drawerPosition={DrawerLayout.positions.Left}
+          drawerType={"back"}
+          drawerBackgroundColor="#ddd"
+          renderNavigationView={
+            parallax ? this.renderParallaxDrawer : this.renderDrawer
+          }
+          contentContainerStyle={
+            // careful; don't elevate the child container
+            // over top of the drawer when the drawer is supposed
+            // to be in front - you won't be able to see/open it.
+            drawerType === "back"
+              ? {}
+              : Platform.select({
+                  ios: {
+                    shadowColor: "#000",
+                    shadowOpacity: 0.5,
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowRadius: 60
+                  },
+                  android: {
+                    elevation: 100,
+                    backgroundColor: "#000"
+                  }
+                })
+          }
+        >
+          <Page
+            type={"back"}
+            fromLeft={this.state.fromLeft}
+            parallaxOn={parallax}
+            openDrawer={() => this.drawer.openDrawer()}
+          />
+        </DrawerLayout>
+      </View>
     );
   }
 }
 
-
-
 const styles = StyleSheet.create({
-  loggedin: {
+  container: {
+    flex: 1
+  },
+  page: {
+    ...StyleSheet.absoluteFillObject,
     alignItems: "center",
-    flex: 1,
+    paddingTop: 40,
+    backgroundColor: "white",
+    flex: 1
+  },
+  pageText: {
+    fontSize: 21,
+    color: "white"
+  },
+  rectButton: {
+    height: 60,
+    padding: 10,
+    alignSelf: "stretch",
+    alignItems: "center",
     justifyContent: "center",
-    padding: 20
+    marginTop: 20,
+    backgroundColor: "white"
+  },
+  rectButtonText: {
+    backgroundColor: "transparent"
+  },
+  drawerContainer: {
+    flex: 1,
+    paddingTop: 10
+  },
+  pageInput: {
+    height: 60,
+    padding: 10,
+    alignSelf: "stretch",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    backgroundColor: "#eee"
+  },
+  drawerText: {
+    margin: 10,
+    marginTop:35,
+    fontSize: 15,
+    textAlign: "left"
   }
 });
-
-export default App;

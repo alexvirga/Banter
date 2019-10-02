@@ -88,7 +88,12 @@ export default class NewGroup extends React.Component {
     console.log(uri);
     return (
       <View
-        style={{ justifyContent: "flex-start", alignSelf: "center", flex: 0.3 , marginBottom: 15}}
+        style={{
+          justifyContent: "flex-start",
+          alignSelf: "center",
+          flex: 0.3,
+          marginBottom: 15
+        }}
       >
         <Image
           source={{ uri: `${this.state.uri}` }}
@@ -159,7 +164,7 @@ export default class NewGroup extends React.Component {
         </View>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View
-            style={{justifyContent: "flex-start", flex: 1, marginTop: 100 }}
+            style={{ justifyContent: "flex-start", flex: 1, marginTop: 100 }}
           >
             {this.processURI()}
             <View style={{ marginBottom: 30, marginTop: 20 }}>
@@ -168,8 +173,8 @@ export default class NewGroup extends React.Component {
                 title="Upload Receipt"
                 type="clear"
               />
-              </View>
-<View>
+            </View>
+            <View>
               <Text
                 style={{
                   textAlign: "center",
