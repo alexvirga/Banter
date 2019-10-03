@@ -36,6 +36,17 @@ export default class Homepage extends React.Component {
       );
   }
 
+  refetch() {
+    fetch("https://evening-mountain-63500.herokuapp.com/groups")
+    .then(resp => resp.json())
+    .then(data =>
+      this.setState({
+        groups: data
+      })
+    );
+
+  }
+
   
 
   setModalVisible(visible) {
@@ -47,6 +58,7 @@ export default class Homepage extends React.Component {
   };
 
   handleCodeChange = code => {
+    this.refetch()
     this.setState({ code: code });
     {
       if (this.state.code.length >= 4) {
@@ -85,6 +97,7 @@ export default class Homepage extends React.Component {
     let newRandomCode = this.codeGenerator(5);
 
     let renderNewGroup = (
+      
       <View>
         <Modal
           animationType="slide"
@@ -118,7 +131,23 @@ export default class Homepage extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View>
+        <View>
+        <Image
+          style={{
+            marginTop: 19,
+            height: 100,
+            width: 100,
+            flex: 0,
+            justifyContent: "flex-start",
+            alignSelf: "center"
+          }}
+          source={require("../assets/banter.png")}
+        />
+        </View>
+        
         <View style={styles.logincomp}>
+
           <Text
             style={{
               fontSize: 40,
@@ -127,7 +156,7 @@ export default class Homepage extends React.Component {
               color: "#545656"
             }}
           >
-            Enter Your Code{" "}
+            Enter Your Code {" "}
           </Text>
           <TextInput
             autoCapitalize="characters"
@@ -170,6 +199,15 @@ export default class Homepage extends React.Component {
             />
           </TouchableOpacity>
         </View>
+        <View
+                 style={{
+                  marginTop: 0,
+                  height: 80,
+                  width: 100,
+                  flex: 0,}}>
+          
+        </View>
+        </View>
       </TouchableWithoutFeedback>
     );
   }
@@ -182,7 +220,7 @@ const styles = StyleSheet.create({
 
   logincomp: {
     alignItems: "center",
-    flex: 1,
+    flex: 5,
     justifyContent: "center",
     padding: 20
   }

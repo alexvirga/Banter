@@ -36,14 +36,19 @@ class AppApp extends React.Component {
           })
             .then(resp => resp.json())
             .then(data => {
-              this.setState({ user: data.email });
+              this.setState({ user: data.email }
+                );
               // console.log(data.token);
               if (data.error) {
                 alert(data.error);
               } else {
                 // AsyncStorage.setItem('user', data)
                 this.setState({ isLoggedIn: true });
+
+                
+                
               }
+              this.props.passUser(data.email)
             });
         }
       } catch (error) {

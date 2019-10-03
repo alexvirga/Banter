@@ -22,6 +22,19 @@ export default class WaitingPage extends React.Component {
   };
 
   componentDidMount() {
+    this.timer = setInterval(()=> this.updateGroups(), 3000)
+    fetch("https://evening-mountain-63500.herokuapp.com/groups")
+      .then(resp => resp.json())
+      .then(data =>
+        this.setState({
+          group: data.filter(group => group.group_code === this.props.code)
+        })
+      )
+      .then(data => this.validateLeader())
+      
+  }
+
+  async updateGroups() {
     fetch("https://evening-mountain-63500.herokuapp.com/groups")
       .then(resp => resp.json())
       .then(data =>
@@ -116,18 +129,20 @@ export default class WaitingPage extends React.Component {
             type="clear"
           />
 
-          <Text style={{ alignSelf: "center", justifyContent: "center" }}>
+          <Text style={{ alignSelf: "center", justifyContent: "center" , marginBottom: 30, fontSize: 18}}>
             {" "}
             Members{" "}
           </Text>
 
           {users.map(user => (
-            <ListItem
+            <Text
+            
               style={styles.listView}
               key={user.id}
-              title={user.username}
+              
+
               bottomDivider
-            />
+            > {user.username}</Text>
           ))}
         </View>
         <Button
@@ -135,7 +150,7 @@ export default class WaitingPage extends React.Component {
             marginBottom: 15
           }}
           buttonStyle={styles.button}
-          onPress={() => this.componentDidMount()}
+          onPress={() => this.updateGroups()}
           title="Refresh users"
           type="clear"
         />
@@ -158,7 +173,9 @@ export default class WaitingPage extends React.Component {
 
 const styles = StyleSheet.create({
   listView: {
+    fontSize: 30,
     width: 300,
+    justifyContent:"center",
     alignItems: "center",
     textAlign: "center",
     alignSelf: "center"
