@@ -18,25 +18,9 @@ import ProfileScreen from "./components/ProfileScreen"
 import { RectButton } from "react-native-gesture-handler";
 
 import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
+import Page from "./components/Page"
 
-class Page extends Component {
 
-  passUser = user => {
-    console.log(user)
-  }
-  render() {
-    this.passUser()
-    console.log(this.props.selected);
-
-    let buttonpages = () => {
-      if (this.props.selected === "your groups") {
-        return <ProfileScreen/>;
-      } else return <AppApp passUser={this.passUser}/>;
-    };
-
-    return <View style={styles.page}>{buttonpages()}</View>;
-  }
-}
 
 export default class App extends Component {
   state = {

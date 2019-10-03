@@ -5,7 +5,6 @@ import Homepage from "./Homepage";
 import ActionCableProvider from "react-actioncable-provider";
 import { View } from "react-native";
 
-
 class AppApp extends React.Component {
   state = {
     email: "",
@@ -36,21 +35,17 @@ class AppApp extends React.Component {
           })
             .then(resp => resp.json())
             .then(data => {
-              this.setState({ user: data.email }
-                );
+              this.setState({ user: data.email });
               // console.log(data.token);
               if (data.error) {
                 alert(data.error);
               } else {
                 // AsyncStorage.setItem('user', data)
                 this.setState({ isLoggedIn: true });
-
-                
-                
               }
-              this.props.passUser(data.email)
-            });
-        }
+            })
+            .then(data => this.props.passUser(this.state.user)
+            )}
       } catch (error) {
         alert("user not found");
       }
@@ -89,6 +84,7 @@ class AppApp extends React.Component {
           };
           _storeData();
           return homepage;
+          
         }
       });
   };
@@ -106,17 +102,10 @@ class AppApp extends React.Component {
     else return loginscreen;
   }
 
-
-
   render() {
-    return (
-      this.page()
-    
-      ) 
+    return this.page();
   }
 }
-
-
 
 const styles = StyleSheet.create({
   loggedin: {
