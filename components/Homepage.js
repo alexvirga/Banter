@@ -33,23 +33,16 @@ export default class Homepage extends React.Component {
         this.setState({
           groups: data
         })
-        
       );
-      this.oldGroup()
+    this.oldGroup();
   }
 
   oldGroup = () => {
     if (this.props.profileCode !== undefined) {
-      this.setState({code: this.props.profileCode, submitted: true})
-      console.log(this.state.code)
-      
-      
+      this.setState({ code: this.props.profileCode, submitted: true });
+      console.log(this.state.code);
     }
-    
-  
   };
-
-
 
   refetch() {
     fetch("https://evening-mountain-63500.herokuapp.com/groups")
@@ -82,7 +75,6 @@ export default class Homepage extends React.Component {
 
   // Validates if group exists. If true, renders waiting page
   handleSubmit = () => {
-  
     let codes = this.state.groups.map(group => group.group_code);
     if (codes.includes(this.state.code)) {
       this.setState({ submitted: true });
@@ -106,8 +98,6 @@ export default class Homepage extends React.Component {
     this.setState({ createNew: true });
   };
 
-
-
   // renderPreviousGroup = () =>{
   // if (this.props.profileCode !== undefined){
   //   this.setState({code:this.props.profileCode})
@@ -115,8 +105,6 @@ export default class Homepage extends React.Component {
   // }}
 
   render() {
-    
-
     let newRandomCode = this.codeGenerator(5);
 
     let renderNewGroup = (

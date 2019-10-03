@@ -46,12 +46,16 @@ export default class ProfileScreen extends React.Component {
 
         <View style={{ margin: 20, height: 600 }}>
           <View style={{ margin: 10, flex: 4 }}>
+            <View style={{flexDirection:"row", alignItems: "center", justifyContent: "space-between", marginBottom: 10}}> 
+            <Text style={{alignSelf:"center", fontSize: 18}}> Group Code</Text> 
+            <Text style={{fontSize: 18}}> Amount Paid</Text>
+            </View>
             <ScrollView>
               {mygroupIDs.map(code => (
                 <ListItem
                   key={code.group.group_code}
                   title={code.group.group_code}
-                  titleStyle={{ textAlign: "center", justifyContent: "center" }}
+                  titleStyle={{ textAlign: "left", justifyContent: "center" }}
                   style={{ width: 300 }}
                   rightTitle={code.user_payment_amt.toString()}
                   onPress={() => handlePress(code.group.group_code)}

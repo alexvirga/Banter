@@ -6,7 +6,8 @@ import {
   TextInput,
   AsyncStorage,
   TouchableOpacity,
-  Image
+  Image,
+  Modal
 } from "react-native";
 import {
   List,
@@ -25,11 +26,13 @@ export default class BillView extends React.Component {
     users: [],
     user_amt: 0,
     updated: 100,
-    me: this.props.user
+    me: this.props.user,
+    viewReceipt: false,
+    modalVisible: false
   };
 
   componentDidMount() {
-    this.timer = setInterval(()=> this.autoRefresh(), 3000)
+    this.timer = setInterval(()=> this.autoRefresh(), 2000)
     fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
       .then(resp => resp.json())
       .then(data => {
@@ -52,7 +55,6 @@ export default class BillView extends React.Component {
       });
   }
 
-  
 
   handleTotal = (text, user) => {
     fetch("https://evening-mountain-63500.herokuapp.com/user_groups", {
@@ -150,6 +152,11 @@ export default class BillView extends React.Component {
       } else return "red";
     };
 
+
+
+  
+
+
     return (
       <View style={{ flexDirection: "row" }}>
         <View
@@ -190,6 +197,16 @@ export default class BillView extends React.Component {
                 >
                   ${billTotal[0].toFixed(2)}
                 </Text>
+                <Button
+            style={{
+              marginBottom: 0
+            }}
+            buttonStyle={styles.button}
+            onPress={() => this.setModalVisible(true)}
+            title="View Receipt"
+            type="clear"
+          />
+         
               </View>
               <View>
                 <ButtonGroup
@@ -322,7 +339,7 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   button: {
-    marginTop: 30,
+    marginTop: 5,
     justifyContent: "center"
   }
 });
