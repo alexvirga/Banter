@@ -76,7 +76,7 @@ export default class App extends Component {
           drawerBackgroundColor="#FCFCFD"
           renderNavigationView={this.renderDrawer}
         >
-          <Page selected={this.state.path} type={"back"} fromLeft={true} />
+          <Page style={styles.page} selected={this.state.path} type={"back"} fromLeft={true} />
         </DrawerLayout>
       </View>
     );
@@ -94,39 +94,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1F1F6",
     flex: 1
   },
-  pageText: {
-    fontSize: 21,
-    color: "white"
-  },
-  rectButton: {
-    height: 60,
-    padding: 10,
-    alignSelf: "stretch",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-    backgroundColor: "white"
-  },
-  rectButtonText: {
-    backgroundColor: "transparent"
-  },
+
+
+
   drawerContainer: {
     flex: 1,
     paddingTop: 10
   },
-  pageInput: {
-    height: 60,
-    padding: 10,
-    alignSelf: "stretch",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-    backgroundColor: "#eee"
-  },
-  drawerText: {
-    margin: 10,
-    marginTop: 35,
-    fontSize: 15,
-    textAlign: "left"
-  }
+
 });

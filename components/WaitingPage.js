@@ -79,6 +79,7 @@ export default class WaitingPage extends React.Component {
       this.setState({isLeader: true}) // SET BACK TO FALSE ONCE TESITNG IS COMPLETE
   }
 
+  
   render() {
     let group_id = this.state.group.map(group => group.id)
     let groupid = group_id[0]
@@ -175,6 +176,7 @@ const styles = StyleSheet.create({
   listView: {
     fontSize: 30,
     width: 300,
+    marginBottom: 20,
     justifyContent:"center",
     alignItems: "center",
     textAlign: "center",

@@ -29,6 +29,7 @@ state = {
       console.log(user)
     }
     render() {
+        console.log(this.props.profileCode)
       
       console.log(this.props.selected);
   
@@ -52,7 +53,9 @@ state = {
       alignItems: "center",
       paddingTop: 40,
       backgroundColor: "#F1F1F6",
-      flex: 1
+      flex: 1,
+      position: "relative"
+
     },
     pageText: {
       fontSize: 21,
