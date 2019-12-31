@@ -46,6 +46,7 @@ export default class UserBillSplit extends React.Component {
             alignSelf: "center",
             backgroundColor: "lightgrey"
           }}
+          keyboardType={"numeric"}
           defaultValue={"0"}
           value={this.state.amt.toString()}
           placeholder={this.props.evenSplit}

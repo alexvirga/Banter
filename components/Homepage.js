@@ -34,9 +34,25 @@ export default class Homepage extends React.Component {
           groups: data
         })
       );
+    this.oldGroup();
   }
 
-  
+  oldGroup = () => {
+    if (this.props.profileCode !== undefined) {
+      this.setState({ code: this.props.profileCode, submitted: true });
+      console.log(this.state.code);
+    }
+  };
+
+  refetch() {
+    fetch("https://evening-mountain-63500.herokuapp.com/groups")
+      .then(resp => resp.json())
+      .then(data =>
+        this.setState({
+          groups: data
+        })
+      );
+  }
 
   setModalVisible(visible) {
     this.setState({ createNew: true, modalVisible: visible });
@@ -47,6 +63,7 @@ export default class Homepage extends React.Component {
   };
 
   handleCodeChange = code => {
+    this.refetch();
     this.setState({ code: code });
     {
       if (this.state.code.length >= 4) {
@@ -80,6 +97,12 @@ export default class Homepage extends React.Component {
   newGrouphandler = () => {
     this.setState({ createNew: true });
   };
+
+  // renderPreviousGroup = () =>{
+  // if (this.props.profileCode !== undefined){
+  //   this.setState({code:this.props.profileCode})
+  //   this.handleSubmit()
+  // }}
 
   render() {
     let newRandomCode = this.codeGenerator(5);
@@ -118,57 +141,80 @@ export default class Homepage extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.logincomp}>
-          <Text
-            style={{
-              fontSize: 40,
-              marginBottom: 50,
+        <View>
+          <View>
+            <Image
+              style={{
+                marginTop: 19,
+                height: 100,
+                width: 100,
+                flex: 0,
+                justifyContent: "flex-start",
+                alignSelf: "center"
+              }}
+              source={require("../assets/banter.png")}
+            />
+          </View>
 
-              color: "#545656"
-            }}
-          >
-            Enter Your Code{" "}
-          </Text>
-          <TextInput
-            autoCapitalize="characters"
-            autoCorrect={false}
-            maxLength={5}
-            value={this.state.email}
-            onChangeText={this.handleCodeChange}
-            style={{
-              textAlign: "center",
-              width: 200,
-              height: 60,
-              fontSize: 60,
-              letterSpacing: 25
-            }}
-            placeholder="C9QNX"
-          />
+          <View style={styles.logincomp}>
+            <Text
+              style={{
+                fontSize: 40,
+                marginBottom: 50,
 
-          <Button
-            buttonStyle={styles.button}
-            onPress={() => this.setModalVisible(true)}
-            title="Generate New Code"
-            type="clear"
-          />
-          {/* <Button
+                color: "#545656"
+              }}
+            >
+              Enter Your Code{" "}
+            </Text>
+            <TextInput
+              autoCapitalize="characters"
+              autoCorrect={false}
+              maxLength={5}
+              onChangeText={this.handleCodeChange}
+              style={{
+                textAlign: "center",
+                width: 200,
+                height: 60,
+                fontSize: 60,
+                letterSpacing: 25
+              }}
+              placeholder="C9QNX"
+            />
+
+            <Button
+              buttonStyle={styles.button}
+              onPress={() => this.setModalVisible(true)}
+              title="Generate New Code"
+              type="clear"
+            />
+            {/* <Button
           buttonStyle={styles.button}
           onPress={() => this.logoutHandler}
           title="Log Out"
           type="clear"
         /> */}
 
-          <View style={{ margin: 7 }} />
-          <TouchableOpacity onPress={this.handleSubmit}>
-            <Image
-              style={{
-                opacity: this.state.buttonOpacity,
-                marginTop: 50,
-                justifyContent: "center"
-              }}
-              source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
-            />
-          </TouchableOpacity>
+            <View style={{ margin: 7 }} />
+            <TouchableOpacity onPress={this.handleSubmit}>
+              <Image
+                style={{
+                  opacity: this.state.buttonOpacity,
+                  marginTop: 50,
+                  justifyContent: "center"
+                }}
+                source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              marginTop: 0,
+              height: 80,
+              width: 100,
+              flex: 0
+            }}
+          ></View>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -182,7 +228,7 @@ const styles = StyleSheet.create({
 
   logincomp: {
     alignItems: "center",
-    flex: 1,
+    flex: 5,
     justifyContent: "center",
     padding: 20
   }

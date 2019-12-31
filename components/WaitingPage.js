@@ -22,6 +22,7 @@ export default class WaitingPage extends React.Component {
   };
 
   componentDidMount() {
+    this.timer = setInterval(() => this.updateGroups(), 1500);
     fetch("https://evening-mountain-63500.herokuapp.com/groups")
       .then(resp => resp.json())
       .then(data =>
@@ -29,8 +30,18 @@ export default class WaitingPage extends React.Component {
           group: data.filter(group => group.group_code === this.props.code)
         })
       )
-      .then(data => this.validateLeader())
-      
+      .then(data => this.validateLeader());
+  }
+
+  async updateGroups() {
+    fetch("https://evening-mountain-63500.herokuapp.com/groups")
+      .then(resp => resp.json())
+      .then(data =>
+        this.setState({
+          group: data.filter(group => group.group_code === this.props.code)
+        })
+      )
+      .then(data => this.validateLeader());
   }
 
   handleSubmit = e => {
@@ -59,27 +70,33 @@ export default class WaitingPage extends React.Component {
   };
 
   validateLeader = () => {
-    let matchedLeader = this.state.group.map(group => group.leader_id === this.props.user.id)
-    if (matchedLeader[0] === true)
-      this.setState({isLeader: true });
-      else 
-      this.setState({isLeader: true}) // SET BACK TO FALSE ONCE TESITNG IS COMPLETE
-  }
+    let matchedLeader = this.state.group.map(
+      group => group.leader_id === this.props.user.id
+    );
+    if (matchedLeader[0] === true) this.setState({ isLeader: true });
+    else this.setState({ isLeader: true }); // SET BACK TO FALSE ONCE TESITNG IS COMPLETE
+  };
 
   render() {
-    let group_id = this.state.group.map(group => group.id)
-    let groupid = group_id[0]
-    let billview =  <BillView group={this.state.group} user={this.props.user} index={this.props.index} group_id={groupid} code={this.props.code}/>
+    let group_id = this.state.group.map(group => group.id);
+    let groupid = group_id[0];
+    let billview = (
+      <BillView
+        uri={this.props.uri}
+        group={this.state.group}
+        user={this.props.user}
+        index={this.props.index}
+        group_id={groupid}
+        code={this.props.code}
+      />
+    );
 
-    if (this.state.ready === true){
-      return billview
+    if (this.state.ready === true) {
+      return billview;
     }
-
-
 
     let myusers = this.state.group.map(obj => obj.users);
     const users = myusers.flat(1);
-
 
     return (
       <View
@@ -116,32 +133,60 @@ export default class WaitingPage extends React.Component {
             type="clear"
           />
 
-          <Text style={{ alignSelf: "center", justifyContent: "center" }}>
+          <Text
+            style={{
+              alignSelf: "center",
+              justifyContent: "center",
+              marginBottom: 5,
+              fontSize: 18
+            }}
+          >
             {" "}
             Members{" "}
           </Text>
+          <Text
+            style={{
+              alignSelf: "center",
+              justifyContent: "center",
+              marginBottom: 20,
+              fontSize: 18,
+              color: "lightgrey"
+            }}
+          >
+            _________________
+          </Text>
 
           {users.map(user => (
-            <ListItem
-              style={styles.listView}
-              key={user.id}
-              title={user.username}
-              bottomDivider
-            />
+            <Text style={styles.listView} key={user.id} bottomDivider>
+              {" "}
+              {user.username}
+            </Text>
           ))}
         </View>
+        <Text
+            style={{
+              alignSelf: "center",
+              justifyContent: "center",
+              marginBottom: 15,
+              fontSize: 18,
+              color: "lightgrey"
+            }}
+          >
+            _________________
+          </Text>
+
         <Button
           style={{
             marginBottom: 15
           }}
           buttonStyle={styles.button}
-          onPress={() => this.componentDidMount()}
+          onPress={() => this.updateGroups()}
           title="Refresh users"
           type="clear"
         />
         <View>
           {this.state.isLeader ? (
-            <TouchableOpacity onPress={() => this.setState({ready: true})}>
+            <TouchableOpacity onPress={() => this.setState({ ready: true })}>
               <Image
                 style={styles.button}
                 source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
@@ -158,7 +203,10 @@ export default class WaitingPage extends React.Component {
 
 const styles = StyleSheet.create({
   listView: {
+    fontSize: 30,
     width: 300,
+    marginBottom: 15,
+    justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
     alignSelf: "center"

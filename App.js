@@ -18,20 +18,9 @@ import ProfileScreen from "./components/ProfileScreen"
 import { RectButton } from "react-native-gesture-handler";
 
 import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
+import Page from "./components/Page"
 
-class Page extends Component {
-  render() {
-    console.log(this.props.selected);
 
-    let buttonpages = () => {
-      if (this.props.selected === "your groups") {
-        return <ProfileScreen/>;
-      } else return <AppApp />;
-    };
-
-    return <View style={styles.page}>{buttonpages()}</View>;
-  }
-}
 
 export default class App extends Component {
   state = {
@@ -84,10 +73,10 @@ export default class App extends Component {
           keyboardDismissMode="on-drag"
           drawerPosition={DrawerLayout.positions.Left}
           drawerType={"back"}
-          drawerBackgroundColor="#ddd"
+          drawerBackgroundColor="#FCFCFD"
           renderNavigationView={this.renderDrawer}
         >
-          <Page selected={this.state.path} type={"back"} fromLeft={true} />
+          <Page style={styles.page} selected={this.state.path} type={"back"} fromLeft={true} />
         </DrawerLayout>
       </View>
     );
@@ -102,42 +91,15 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
     paddingTop: 40,
-    backgroundColor: "white",
+    backgroundColor: "#F1F1F6",
     flex: 1
   },
-  pageText: {
-    fontSize: 21,
-    color: "white"
-  },
-  rectButton: {
-    height: 60,
-    padding: 10,
-    alignSelf: "stretch",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-    backgroundColor: "white"
-  },
-  rectButtonText: {
-    backgroundColor: "transparent"
-  },
+
+
+
   drawerContainer: {
     flex: 1,
     paddingTop: 10
   },
-  pageInput: {
-    height: 60,
-    padding: 10,
-    alignSelf: "stretch",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-    backgroundColor: "#eee"
-  },
-  drawerText: {
-    margin: 10,
-    marginTop: 35,
-    fontSize: 15,
-    textAlign: "left"
-  }
+
 });

@@ -6,7 +6,9 @@ import {
   TextInput,
   AsyncStorage,
   TouchableOpacity,
-  Image
+  Image,
+  Modal,
+  TouchableHighlight
 } from "react-native";
 import {
   List,
@@ -25,11 +27,13 @@ export default class BillView extends React.Component {
     users: [],
     user_amt: 0,
     updated: 100,
-    me: this.props.user
+    me: this.props.user,
+    viewReceipt: false,
+    modalVisible: false
   };
 
   componentDidMount() {
-    this.timer = setInterval(()=> this.autoRefresh(), 3000)
+    this.timer = setInterval(()=> this.autoRefresh(), 1500)
     fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
       .then(resp => resp.json())
       .then(data => {
@@ -52,7 +56,6 @@ export default class BillView extends React.Component {
       });
   }
 
-  
 
   handleTotal = (text, user) => {
     fetch("https://evening-mountain-63500.herokuapp.com/user_groups", {
@@ -96,6 +99,11 @@ export default class BillView extends React.Component {
       return "0";
     } else return userAmt.toString();
   };
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
 
   render() {
     
@@ -150,6 +158,31 @@ export default class BillView extends React.Component {
       } else return "red";
     };
 
+let recieptModal = <View style={{marginTop: 22}}>
+  <Modal
+    animationType="slide"
+    transparent={false}
+    visible={this.state.modalVisible}
+    onRequestClose={() => {
+      Alert.alert('Modal has been closed.');
+    }}>
+    <View style={{marginTop: 22, flex: 1,
+    justifyContent: 'center', }}>
+      <View>
+        <Text>Hello World!</Text>
+
+        <TouchableHighlight
+          onPress={() => {
+            this.setModalVisible(!this.state.modalVisible);
+          }}>
+          <Text>Hide Modal</Text>
+        </TouchableHighlight>
+      </View>
+    </View>
+  </Modal>
+  </View>
+
+
     return (
       <View style={{ flexDirection: "row" }}>
         <View
@@ -158,6 +191,9 @@ export default class BillView extends React.Component {
           }}
         >
           <ScrollView>
+            <View>
+          {recieptModal}
+          </View>
             <View
               style={{
                 justifyContent: "center",
@@ -190,6 +226,16 @@ export default class BillView extends React.Component {
                 >
                   ${billTotal[0].toFixed(2)}
                 </Text>
+                <Button
+            style={{
+              marginBottom: 0
+            }}
+            buttonStyle={styles.button}
+            onPress={() => this.setModalVisible(true)}
+            title="View Receipt"
+            type="clear"
+          />
+         
               </View>
               <View>
                 <ButtonGroup
@@ -322,7 +368,7 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   button: {
-    marginTop: 30,
+    marginTop: 5,
     justifyContent: "center"
   }
 });
