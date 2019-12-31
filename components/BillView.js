@@ -7,7 +7,8 @@ import {
   AsyncStorage,
   TouchableOpacity,
   Image,
-  Modal
+  Modal,
+  TouchableHighlight
 } from "react-native";
 import {
   List,
@@ -32,7 +33,7 @@ export default class BillView extends React.Component {
   };
 
   componentDidMount() {
-    this.timer = setInterval(()=> this.autoRefresh(), 2000)
+    this.timer = setInterval(()=> this.autoRefresh(), 1500)
     fetch("https://evening-mountain-63500.herokuapp.com/user_groups")
       .then(resp => resp.json())
       .then(data => {
@@ -99,6 +100,11 @@ export default class BillView extends React.Component {
     } else return userAmt.toString();
   };
 
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
+
   render() {
     
     //Sum of all user payment amounts
@@ -152,9 +158,29 @@ export default class BillView extends React.Component {
       } else return "red";
     };
 
+let recieptModal = <View style={{marginTop: 22}}>
+  <Modal
+    animationType="slide"
+    transparent={false}
+    visible={this.state.modalVisible}
+    onRequestClose={() => {
+      Alert.alert('Modal has been closed.');
+    }}>
+    <View style={{marginTop: 22, flex: 1,
+    justifyContent: 'center', }}>
+      <View>
+        <Text>Hello World!</Text>
 
-
-  
+        <TouchableHighlight
+          onPress={() => {
+            this.setModalVisible(!this.state.modalVisible);
+          }}>
+          <Text>Hide Modal</Text>
+        </TouchableHighlight>
+      </View>
+    </View>
+  </Modal>
+  </View>
 
 
     return (
@@ -165,6 +191,9 @@ export default class BillView extends React.Component {
           }}
         >
           <ScrollView>
+            <View>
+          {recieptModal}
+          </View>
             <View
               style={{
                 justifyContent: "center",

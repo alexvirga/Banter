@@ -1,7 +1,15 @@
 import React, { Component } from "react";
-import { Image, TouchableOpacity, ScrollView, Text, StyleSheet, View } from "react-native";
-import { Input, Button } from "react-native-elements";
-import Signup from "./Signup"
+import {
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+  StyleSheet,
+  View,
+} from "react-native";
+import { Button } from "react-native-elements";
+import Signup from "./Signup";
+import { TextInput } from "react-native-gesture-handler";
 
 export default class Login extends Component {
   state = {
@@ -9,50 +17,41 @@ export default class Login extends Component {
     password: "",
     user: "",
     signup: false
-
   };
 
-
   handleEmailChange = email => {
-
     this.setState({ email: email });
   };
 
   handlePasswordChange = password => {
-  
     this.setState({ password: password });
   };
 
   handleSubmit = user => {
-
     this.props.clickHandler(this.state);
   };
 
   signupHandler = () => {
-    this.setState({signup: true})
-  }
-
+    this.setState({ signup: true });
+  };
 
   render() {
-    let signup = (
-      <Signup  clickHandler={this.props.clickHandler}/>);
+    let signup = <Signup clickHandler={this.props.clickHandler} />;
 
-      if (this.state.signup === true) return signup
-  
+    if (this.state.signup === true) return signup;
+
     return (
-      
       <View style={styles.logincomp}>
-        
         <Text style={{ fontSize: 27 }}>Login</Text>
-        <Input
-                 style={{
-                  textAlign: "center",
-                 }}          
+        <TextInput
+          style={{
+            textAlign: "center"
+          }}
           value={this.state.email}
           onChangeText={this.handleEmailChange}
           placeholder="Username"
         />
-        <Input
+        <TextInput
           value={this.state.password}
           onChangeText={this.handlePasswordChange}
           placeholder="Password"
@@ -60,9 +59,9 @@ export default class Login extends Component {
         />
         <View style={{ margin: 7 }} />
         <Button
-        style={{
-          marginBottom: 15
-        }}
+          style={{
+            marginBottom: 15
+          }}
           buttonStyle={styles.button}
           onPress={() => this.signupHandler()}
           title=" Sign Up"
@@ -70,12 +69,11 @@ export default class Login extends Component {
         />
 
         <TouchableOpacity onPress={this.handleSubmit}>
-      <Image
-        style={styles.button}
-        source={require('../assets/round_arrow_forward_ios_black_18dp.png')}
-      />
-    </TouchableOpacity>
-
+          <Image
+            style={styles.button}
+            source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
+          />
+        </TouchableOpacity>
 
         {/* <Button
 
@@ -88,12 +86,11 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   button: {
     marginTop: 30,
-    justifyContent: "center",
+    justifyContent: "center"
   },
 
   logincomp: {
-
-      textAlign: "center",
+    textAlign: "center",
 
     alignItems: "center",
     flex: 1,

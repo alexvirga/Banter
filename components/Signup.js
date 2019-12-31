@@ -1,52 +1,58 @@
 import React, { Component } from "react";
-import { Image, TouchableOpacity, ScrollView, Text, StyleSheet, View } from "react-native";
-import { Input, Button } from "react-native-elements";
+import {
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+  StyleSheet,
+  View
+} from "react-native";
+import {  Button } from "react-native-elements";
+import { TextInput } from "react-native-gesture-handler";
 
-export default class Signup extends Component {
+
+class Signup extends Component {
   state = {
     email: "",
     password: "",
     password2: "",
-    username: "",
-
+    username: ""
   };
 
-
-  signupHandler=(user)=>{
-      {
-        if (this.state.password === this.state.password2) {
-            fetch("https://evening-mountain-63500.herokuapp.com/users", {
-                headers: {
-                    'content-type': 'application/json',
-                    'accept': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    user: {
-                        email: this.state.email,
-                        username: this.state.username,
-                        password: this.state.password
-                    }
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.errors) {
-                    alert(data.errors)
-                } else {
-                    this.props.clickHandler(this.state)
-                }
-            })
-        } else {
-            alert("Passwords must match")
-            this.setState({
-                password: "",
-                password2: ""
-            })
-        }
+  signupHandler = user => {
+    {
+      if (this.state.password === this.state.password2) {
+        fetch("https://evening-mountain-63500.herokuapp.com/users", {
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json"
+          },
+          method: "POST",
+          body: JSON.stringify({
+            user: {
+              email: this.state.email,
+              username: this.state.username,
+              password: this.state.password
+            }
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.errors) {
+              alert(data.errors);
+            } else {
+              this.props.clickHandler(this.state);
+            }
+          });
+      } else {
+        alert("Passwords must match");
+        this.setState({
+          password: "",
+          password2: ""
+        });
+      }
     }
-    
-}
+  };
 
   handleEmailChange = email => {
     this.setState({ email: email });
@@ -63,60 +69,53 @@ export default class Signup extends Component {
     this.setState({ username: username });
   };
 
-//   handleSubmit = user => {
-//     this.props.clickHandler(this.state);
-//   };
+  //   handleSubmit = user => {
+  //     this.props.clickHandler(this.state);
+  //   };
 
   render() {
-      console.log(this.state)
-  
+    console.log(this.state);
+
     return (
-      
       <View style={styles.logincomp}>
-        
         <Text style={{ fontSize: 27 }}>Sign up</Text>
-        <Input
-                 style={{
-                  textAlign: "center",
-                 }}          
+        <TextInput
+          style={{
+            textAlign: "center"
+          }}
           value={this.state.email}
           onChangeText={this.handleEmailChange}
           placeholder="Email"
         />
 
-                <Input
+        <TextInput
           value={this.state.username}
           onChangeText={this.handleUsernameChange}
           placeholder="Username"
-
         />
 
-<Input
+        <TextInput
           value={this.state.password}
           onChangeText={this.handlePasswordChange}
           placeholder="Password"
           secureTextEntry={true}
         />
 
-
-<Input
+        <TextInput
           value={this.state.password2}
           onChangeText={this.handlePasswordTwoChange}
           placeholder="Password"
           secureTextEntry={true}
         />
 
-
         <View style={{ margin: 7 }} />
-        
 
         <TouchableOpacity onPress={this.signupHandler}>
-      <Image
-        style={styles.button}
-        source={require('../assets/round_arrow_forward_ios_black_18dp.png')}
-      />
-    </TouchableOpacity>
-
+          <Image
+            style={styles.button}
+            source={require("../assets/round_arrow_forward_ios_black_18dp.png")}
+          />
+        </TouchableOpacity>
 
         {/* <Button
 
@@ -129,12 +128,11 @@ export default class Signup extends Component {
 const styles = StyleSheet.create({
   button: {
     marginTop: 30,
-    justifyContent: "center",
+    justifyContent: "center"
   },
 
   logincomp: {
-
-      textAlign: "center",
+    textAlign: "center",
 
     alignItems: "center",
     flex: 1,
@@ -142,3 +140,5 @@ const styles = StyleSheet.create({
     padding: 20
   }
 });
+
+export default Signup

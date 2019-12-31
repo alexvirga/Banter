@@ -85,6 +85,7 @@ export default class NewGroup extends React.Component {
   };
 
   processURI = uri => {
+
     console.log(uri);
     return (
       <View
@@ -174,6 +175,7 @@ export default class NewGroup extends React.Component {
                 title="Upload Receipt"
                 type="clear"
               />
+
             </View>
             <View>
               <Text

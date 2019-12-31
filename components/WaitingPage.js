@@ -22,7 +22,7 @@ export default class WaitingPage extends React.Component {
   };
 
   componentDidMount() {
-    this.timer = setInterval(() => this.updateGroups(), 2000);
+    this.timer = setInterval(() => this.updateGroups(), 1500);
     fetch("https://evening-mountain-63500.herokuapp.com/groups")
       .then(resp => resp.json())
       .then(data =>
